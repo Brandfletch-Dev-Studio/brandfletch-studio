@@ -61,15 +61,15 @@
     },
     {
       "id": "p6",
-      "tag": "Web App",
-      "title": "Project Name Six",
-      "desc": "Full-stack application with real-time features.",
+      "title": "Brandfletch Business Academy ",
+      "tag": "Online school",
+      "desc": "Online learning management system, featuring business courses for entrepreneurs looking to scale their businesses",
       "stack": [
         "Next.js",
         "WebSocket",
         "Redis"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio"
+      "link": "https://edu.brandfletch.com"
     }
   ],
   "services": [
