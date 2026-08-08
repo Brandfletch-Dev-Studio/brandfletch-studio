@@ -126,15 +126,5 @@
     "email": "hello@brandfletch.dev",
     "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
   },
-  "messages": [
-    {
-      "id": "m1786191575907",
-      "name": "Test User",
-      "email": "test@test.com",
-      "subject": "Hello",
-      "message": "This is a test message.",
-      "date": "2026-08-08T12:19:35.907Z",
-      "read": false
-    }
-  ]
+  "messages": []
 }
