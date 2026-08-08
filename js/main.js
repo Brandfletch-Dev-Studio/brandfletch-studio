@@ -40,7 +40,12 @@ async function loadContent() {
 // --- Render Projects ---
 function renderProjects() {
     const grid = document.getElementById('workGrid');
-    const projects = siteContent.projects || defaultContent.projects;
+    const all = siteContent.projects || defaultContent.projects;
+    // Only show projects marked "featured" in the admin panel.
+    // Falls back to showing everything if nothing has been marked yet,
+    // so the section is never empty.
+    const featured = all.filter(p => p.featured);
+    const projects = featured.length > 0 ? featured : all;
     grid.innerHTML = projects.map(p => `
         <a href="${p.link || '#'}" target="_blank" rel="noopener" class="work-card reveal">
             <span class="work-card-tag">${p.tag || ''}</span>

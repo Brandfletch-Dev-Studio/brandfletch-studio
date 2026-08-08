@@ -169,7 +169,7 @@ function renderProjects() {
     list.innerHTML = projects.map(p => `
         <div class="data-item">
             <div class="data-item-main">
-                <span class="data-item-tag">${escape(p.tag)}</span>
+                <span class="data-item-tag">${escape(p.tag)}${p.featured ? ' · <span class=\'featured-badge\'>★ Featured</span>' : ''}</span>
                 <h3>${escape(p.title)}</h3>
                 <p>${escape(p.desc)}</p>
                 <div class="data-stack">${(p.stack || []).map(s => `<span>${escape(s)}</span>`).join('')}</div>
@@ -267,6 +267,7 @@ function openProjectEditor(id) {
         document.getElementById('projectDesc').value = p.desc;
         document.getElementById('projectStack').value = (p.stack || []).join(', ');
         document.getElementById('projectLink').value = p.link;
+        document.getElementById('projectFeatured').checked = !!p.featured;
     } else {
         document.getElementById('projectModalTitle').textContent = 'Add Project';
         document.getElementById('projectId').value = '';
@@ -287,7 +288,8 @@ async function saveProject() {
         tag: document.getElementById('projectTag').value,
         desc: document.getElementById('projectDesc').value,
         stack: document.getElementById('projectStack').value.split(',').map(s => s.trim()).filter(Boolean),
-        link: document.getElementById('projectLink').value
+        link: document.getElementById('projectLink').value,
+        featured: document.getElementById('projectFeatured').checked
     };
 
     if (id) {
