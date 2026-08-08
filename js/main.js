@@ -11,42 +11,42 @@ const projects = [
         title: 'Project Name One',
         desc: 'A brief one-liner about what this app does and why it matters.',
         stack: ['React', 'Node.js', 'PostgreSQL'],
-        link: 'https://github.com/brandfletch'
+        link: 'https://github.com/Brandfletch-Dev-Studio'
     },
     {
         tag: 'Automation',
         title: 'Project Name Two',
         desc: 'Another solid project description that explains the value.',
         stack: ['Python', 'Redis', 'Docker'],
-        link: 'https://github.com/brandfletch'
+        link: 'https://github.com/Brandfletch-Dev-Studio'
     },
     {
         tag: 'API',
         title: 'Project Name Three',
         desc: 'Something about this service, what it powers, who uses it.',
         stack: ['TypeScript', 'Express', 'MongoDB'],
-        link: 'https://github.com/brandfletch'
+        link: 'https://github.com/Brandfletch-Dev-Studio'
     },
     {
         tag: 'Mobile',
         title: 'Project Name Four',
         desc: 'Cross-platform app that does X for Y audience.',
         stack: ['React Native', 'Firebase'],
-        link: 'https://github.com/brandfletch'
+        link: 'https://github.com/Brandfletch-Dev-Studio'
     },
     {
         tag: 'Tool',
         title: 'Project Name Five',
         desc: 'A dev tool or CLI that makes life easier for developers.',
         stack: ['Go', 'CLI', 'OSS'],
-        link: 'https://github.com/brandfletch'
+        link: 'https://github.com/Brandfletch-Dev-Studio'
     },
     {
         tag: 'Web App',
         title: 'Project Name Six',
         desc: 'Full-stack application with real-time features.',
         stack: ['Next.js', 'WebSocket', 'Redis'],
-        link: 'https://github.com/brandfletch'
+        link: 'https://github.com/Brandfletch-Dev-Studio'
     }
 ];
 
@@ -109,10 +109,56 @@ function initReveal() {
         });
 }
 
+// --- Contact Form (Vercel Forms) ---
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('formStatus');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.className = 'form-status sending';
+        status.textContent = 'Sending...';
+
+        const data = {
+            name: form.name.value,
+            email: form.email.value,
+            subject: form.subject.value,
+            message: form.message.value
+        };
+
+        try {
+            const res = await fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(data).toString()
+            });
+
+            if (res.ok || res.status === 201 || res.status === 200) {
+                status.className = 'form-status success';
+                status.textContent = 'Message sent! We\'ll get back to you soon.';
+                form.reset();
+            } else {
+                throw new Error('Server error');
+            }
+        } catch (err) {
+            status.className = 'form-status error';
+            status.textContent = 'Something went wrong. Try emailing us directly.';
+        }
+
+        setTimeout(() => {
+            status.textContent = '';
+            status.className = 'form-status';
+        }, 6000);
+    });
+}
+
 // --- Init ---
 document.addEventListener('DOMContentLoaded', () => {
     renderProjects();
     initNavScroll();
     initMobileMenu();
     initReveal();
+    initContactForm();
 });

@@ -3,13 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Brandfletch Dev Studio — building apps, tools, and digital experiences.">
-    <title>Brandfletch Dev Studio</title>
+    <meta name="description" content="Brandfletch Dev Studio — building apps, tools, and digital experiences. Web apps, automations, APIs, and everything in between.">
+    <meta name="keywords" content="dev studio, web development, app development, automations, APIs, Brandfletch, software studio">
+    <meta name="author" content="Brandfletch Dev Studio">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0a0a0f">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Brandfletch Dev Studio — Building apps, tools, and digital experiences.">
+    <meta property="og:description" content="A dev studio crafting software that ships — web apps, automations, APIs, and everything in between.">
+    <meta property="og:url" content="https://brandfletch-studio.vercel.app/">
+    <meta property="og:site_name" content="Brandfletch Dev Studio">
+    <meta property="og:image" content="https://brandfletch-studio.vercel.app/assets/og-image.png">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Brandfletch Dev Studio">
+    <meta name="twitter:description" content="A dev studio crafting software that ships — web apps, automations, APIs, and everything in between.">
+    <meta name="twitter:image" content="https://brandfletch-studio.vercel.app/assets/og-image.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://brandfletch-studio.vercel.app/">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Brandfletch Dev Studio",
+      "url": "https://brandfletch-studio.vercel.app/",
+      "description": "A dev studio crafting software that ships — web apps, automations, APIs, and everything in between.",
+      "sameAs": [
+        "https://github.com/Brandfletch-Dev-Studio"
+      ]
+    }
+    </script>
+
+    <title>Brandfletch Dev Studio — Building apps, tools, and digital experiences.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+    <!-- Vercel Analytics -->
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
     <!-- NAV -->
@@ -26,7 +65,7 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><a href="https://github.com/brandfletch" target="_blank" rel="noopener" class="nav-cta">GitHub</a></li>
+            <li><a href="https://github.com/Brandfletch-Dev-Studio" target="_blank" rel="noopener" class="nav-cta">GitHub</a></li>
         </ul>
     </nav>
 
@@ -109,7 +148,7 @@
                 <h2>We're a dev studio that ships.</h2>
                 <p>Brandfletch Dev Studio builds software. Not slide decks, not roadmaps — actual working apps that people use. We work in the open on GitHub, and we believe good code speaks for itself.</p>
                 <p>Every project is treated like it's ours: clean architecture, thoughtful UX, and the kind of polish that comes from genuinely caring about the craft.</p>
-                <a href="https://github.com/brandfletch" target="_blank" rel="noopener" class="btn btn-outline">See the code →</a>
+                <a href="https://github.com/Brandfletch-Dev-Studio" target="_blank" rel="noopener" class="btn btn-outline">See the code →</a>
             </div>
             <div class="about-stats">
                 <div class="stat">
@@ -134,8 +173,18 @@
             <p class="section-label">/ Contact</p>
             <h2>Let's build something.</h2>
             <p class="contact-sub">Got a project in mind? Reach out — we're always up for a new build.</p>
+            <form id="contactForm" class="contact-form">
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="Your name" required autocomplete="name">
+                    <input type="email" name="email" placeholder="Your email" required autocomplete="email">
+                </div>
+                <input type="text" name="subject" placeholder="Subject" required>
+                <textarea name="message" rows="5" placeholder="Tell us about your project..." required></textarea>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+                <p id="formStatus" class="form-status"></p>
+            </form>
             <div class="contact-links">
-                <a href="https://github.com/brandfletch" target="_blank" rel="noopener" class="contact-link">
+                <a href="https://github.com/Brandfletch-Dev-Studio" target="_blank" rel="noopener" class="contact-link">
                     <span class="contact-icon">⌥</span>
                     <span>GitHub</span>
                 </a>
