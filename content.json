@@ -38,14 +38,14 @@
     },
     {
       "id": "p4",
-      "tag": "Mobile",
-      "title": "Project Name Four",
-      "desc": "Cross-platform app that does X for Y audience.",
+      "title": "Nyasadesk",
+      "tag": "Team inbox saas",
+      "desc": "Team Inbox software for sales teams",
       "stack": [
         "React Native",
         "Firebase"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio"
+      "link": "https://nyasadesk.com"
     },
     {
       "id": "p5",
