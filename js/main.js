@@ -3,65 +3,66 @@
    Main JS
    =================================== */
 
-// --- Project Data ---
-// Add your projects here — they'll render automatically.
-const projects = [
-    {
-        tag: 'Web App',
-        title: 'Project Name One',
-        desc: 'A brief one-liner about what this app does and why it matters.',
-        stack: ['React', 'Node.js', 'PostgreSQL'],
-        link: 'https://github.com/Brandfletch-Dev-Studio'
-    },
-    {
-        tag: 'Automation',
-        title: 'Project Name Two',
-        desc: 'Another solid project description that explains the value.',
-        stack: ['Python', 'Redis', 'Docker'],
-        link: 'https://github.com/Brandfletch-Dev-Studio'
-    },
-    {
-        tag: 'API',
-        title: 'Project Name Three',
-        desc: 'Something about this service, what it powers, who uses it.',
-        stack: ['TypeScript', 'Express', 'MongoDB'],
-        link: 'https://github.com/Brandfletch-Dev-Studio'
-    },
-    {
-        tag: 'Mobile',
-        title: 'Project Name Four',
-        desc: 'Cross-platform app that does X for Y audience.',
-        stack: ['React Native', 'Firebase'],
-        link: 'https://github.com/Brandfletch-Dev-Studio'
-    },
-    {
-        tag: 'Tool',
-        title: 'Project Name Five',
-        desc: 'A dev tool or CLI that makes life easier for developers.',
-        stack: ['Go', 'CLI', 'OSS'],
-        link: 'https://github.com/Brandfletch-Dev-Studio'
-    },
-    {
-        tag: 'Web App',
-        title: 'Project Name Six',
-        desc: 'Full-stack application with real-time features.',
-        stack: ['Next.js', 'WebSocket', 'Redis'],
-        link: 'https://github.com/Brandfletch-Dev-Studio'
+// --- State ---
+let siteContent = null;
+
+// --- Default content (fallback) ---
+const defaultContent = {
+    projects: [
+        { tag: 'Web App', title: 'Project Name One', desc: 'A brief one-liner about what this app does and why it matters.', stack: ['React', 'Node.js', 'PostgreSQL'], link: 'https://github.com/Brandfletch-Dev-Studio' },
+        { tag: 'Automation', title: 'Project Name Two', desc: 'Another solid project description that explains the value.', stack: ['Python', 'Redis', 'Docker'], link: 'https://github.com/Brandfletch-Dev-Studio' },
+        { tag: 'API', title: 'Project Name Three', desc: 'Something about this service, what it powers, who uses it.', stack: ['TypeScript', 'Express', 'MongoDB'], link: 'https://github.com/Brandfletch-Dev-Studio' },
+        { tag: 'Mobile', title: 'Project Name Four', desc: 'Cross-platform app that does X for Y audience.', stack: ['React Native', 'Firebase'], link: 'https://github.com/Brandfletch-Dev-Studio' },
+        { tag: 'Tool', title: 'Project Name Five', desc: 'A dev tool or CLI that makes life easier for developers.', stack: ['Go', 'CLI', 'OSS'], link: 'https://github.com/Brandfletch-Dev-Studio' },
+        { tag: 'Web App', title: 'Project Name Six', desc: 'Full-stack application with real-time features.', stack: ['Next.js', 'WebSocket', 'Redis'], link: 'https://github.com/Brandfletch-Dev-Studio' }
+    ],
+    services: [
+        { icon: '⬡', title: 'Web Apps', desc: 'Full-stack web applications — frontend, backend, database. Built to scale, designed to last.' },
+        { icon: '⚙', title: 'Automations', desc: 'Workflows that run themselves. Cron jobs, webhooks, integrations — so you don\'t have to.' },
+        { icon: '🔗', title: 'APIs & Integrations', desc: 'REST APIs, third-party integrations, and data pipelines that connect everything together.' },
+        { icon: '▣', title: 'Mobile & More', desc: 'Responsive design, progressive web apps, and cross-platform solutions that work everywhere.' }
+    ]
+};
+
+// --- Load content from API ---
+async function loadContent() {
+    try {
+        const res = await fetch('/api/content');
+        if (res.ok) {
+            siteContent = await res.json();
+        }
+    } catch (e) {
+        // Use defaults
     }
-];
+    if (!siteContent) siteContent = defaultContent;
+}
 
 // --- Render Projects ---
 function renderProjects() {
     const grid = document.getElementById('workGrid');
+    const projects = siteContent.projects || defaultContent.projects;
     grid.innerHTML = projects.map(p => `
-        <a href="${p.link}" target="_blank" rel="noopener" class="work-card reveal">
-            <span class="work-card-tag">${p.tag}</span>
-            <h3>${p.title}</h3>
-            <p>${p.desc}</p>
+        <a href="${p.link || '#'}" target="_blank" rel="noopener" class="work-card reveal">
+            <span class="work-card-tag">${p.tag || ''}</span>
+            <h3>${p.title || ''}</h3>
+            <p>${p.desc || ''}</p>
             <div class="work-stack">
-                ${p.stack.map(s => `<span>${s}</span>`).join('')}
+                ${(p.stack || []).map(s => `<span>${s}</span>`).join('')}
             </div>
         </a>
+    `).join('');
+}
+
+// --- Render Services ---
+function renderServices() {
+    const grid = document.querySelector('.services-grid');
+    const services = siteContent.services || defaultContent.services;
+    grid.innerHTML = services.map(s => `
+        <div class="service-card">
+            <div class="service-icon">${s.icon || ''}</div>
+            <h3>${s.title || ''}</h3>
+            <p>${s.desc || ''}</p>
+        </div>
     `).join('');
 }
 
@@ -109,7 +110,7 @@ function initReveal() {
         });
 }
 
-// --- Contact Form (Vercel Forms) ---
+// --- Contact Form ---
 function initContactForm() {
     const form = document.getElementById('contactForm');
     const status = document.getElementById('formStatus');
@@ -127,20 +128,19 @@ function initContactForm() {
         };
 
         try {
-            const res = await fetch('/', {
+            const res = await fetch('/api/messages', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(data).toString()
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
             });
 
-            if (res.ok || res.status === 201 || res.status === 200) {
+            if (res.ok) {
                 status.className = 'form-status success';
                 status.textContent = 'Message sent! We\'ll get back to you soon.';
                 form.reset();
             } else {
-                throw new Error('Server error');
+                const err = await res.json();
+                throw new Error(err.error || 'Server error');
             }
         } catch (err) {
             status.className = 'form-status error';
@@ -155,8 +155,10 @@ function initContactForm() {
 }
 
 // --- Init ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadContent();
     renderProjects();
+    renderServices();
     initNavScroll();
     initMobileMenu();
     initReveal();

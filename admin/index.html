@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin — Brandfletch Dev Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="login-logo"><span class="logo-mark">&lt;/&gt;</span> Brandfletch</div>
+            <h1>Admin Panel</h1>
+            <p class="login-sub">Enter your password to access the dashboard.</p>
+            <form id="loginForm">
+                <input type="password" id="loginPassword" placeholder="Password" required autofocus>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+                <p id="loginError" class="login-error"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="dashboard hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-mark">&lt;/&gt;</span>
+                <span>Brandfletch</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="overview"><span>◈</span> Overview</button>
+                <button class="nav-item" data-view="projects"><span>▣</span> Projects</button>
+                <button class="nav-item" data-view="services"><span>⚙</span> Services</button>
+                <button class="nav-item" data-view="about"><span>◉</span> About</button>
+                <button class="nav-item" data-view="messages"><span>✉</span> Messages <span id="msgBadge" class="badge hidden"></span></button>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/" target="_blank" class="sidebar-link">View Site →</a>
+                <button id="logoutBtn" class="sidebar-link">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <!-- Overview -->
+            <div class="view active" id="view-overview">
+                <h1 class="view-title">Overview</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-num" id="statProjects">—</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num" id="statServices">—</span>
+                        <span class="stat-label">Services</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num" id="statMessages">—</span>
+                        <span class="stat-label">Unread Messages</span>
+                    </div>
+                </div>
+                <div class="recent-messages">
+                    <h2>Recent Messages</h2>
+                    <div id="recentMsgList" class="recent-list">
+                        <p class="muted">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects -->
+            <div class="view" id="view-projects">
+                <div class="view-header">
+                    <h1 class="view-title">Projects</h1>
+                    <button class="btn btn-primary" onclick="openProjectEditor()">+ Add Project</button>
+                </div>
+                <div id="projectsList" class="data-list">
+                    <p class="muted">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="view" id="view-services">
+                <div class="view-header">
+                    <h1 class="view-title">Services</h1>
+                    <button class="btn btn-primary" onclick="openServiceEditor()">+ Add Service</button>
+                </div>
+                <div id="servicesList" class="data-list">
+                    <p class="muted">Loading...</p>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="view" id="view-about">
+                <h1 class="view-title">About Section</h1>
+                <form id="aboutForm" class="content-form">
+                    <label>Heading</label>
+                    <input type="text" id="aboutHeading" name="heading">
+                    <label>Paragraph 1</label>
+                    <textarea id="aboutP1" rows="3"></textarea>
+                    <label>Paragraph 2</label>
+                    <textarea id="aboutP2" rows="3"></textarea>
+                    <label>GitHub URL</label>
+                    <input type="text" id="aboutGithub" name="githubUrl">
+                    <h3 class="form-section">Stats</h3>
+                    <div class="stats-editor" id="statsEditor"></div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <p id="aboutStatus" class="form-status"></p>
+                </form>
+            </div>
+
+            <!-- Messages -->
+            <div class="view" id="view-messages">
+                <h1 class="view-title">Messages</h1>
+                <div id="messagesList" class="data-list">
+                    <p class="muted">Loading...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Project Editor Modal -->
+    <div id="projectModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="projectModalTitle">Add Project</h2>
+            <form id="projectForm">
+                <input type="hidden" id="projectId">
+                <label>Title</label>
+                <input type="text" id="projectTitle" required>
+                <label>Tag / Category</label>
+                <input type="text" id="projectTag" placeholder="Web App, API, Tool...">
+                <label>Description</label>
+                <textarea id="projectDesc" rows="3"></textarea>
+                <label>Tech Stack (comma-separated)</label>
+                <input type="text" id="projectStack" placeholder="React, Node.js, PostgreSQL">
+                <label>Link</label>
+                <input type="text" id="projectLink" placeholder="https://...">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" onclick="closeProjectModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Service Editor Modal -->
+    <div id="serviceModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="serviceModalTitle">Add Service</h2>
+            <form id="serviceForm">
+                <input type="hidden" id="serviceId">
+                <label>Icon (emoji or symbol)</label>
+                <input type="text" id="serviceIcon" placeholder="⬡">
+                <label>Title</label>
+                <input type="text" id="serviceTitle" required>
+                <label>Description</label>
+                <textarea id="serviceDesc" rows="3"></textarea>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" onclick="closeServiceModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

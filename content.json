@@ -1,0 +1,78 @@
+{
+  "projects": [
+    {
+      "id": "p1",
+      "tag": "Web App",
+      "title": "Project Name One",
+      "desc": "A brief one-liner about what this app does and why it matters.",
+      "stack": ["React", "Node.js", "PostgreSQL"],
+      "link": "https://github.com/Brandfletch-Dev-Studio"
+    },
+    {
+      "id": "p2",
+      "tag": "Automation",
+      "title": "Project Name Two",
+      "desc": "Another solid project description that explains the value.",
+      "stack": ["Python", "Redis", "Docker"],
+      "link": "https://github.com/Brandfletch-Dev-Studio"
+    },
+    {
+      "id": "p3",
+      "tag": "API",
+      "title": "Project Name Three",
+      "desc": "Something about this service, what it powers, who uses it.",
+      "stack": ["TypeScript", "Express", "MongoDB"],
+      "link": "https://github.com/Brandfletch-Dev-Studio"
+    },
+    {
+      "id": "p4",
+      "tag": "Mobile",
+      "title": "Project Name Four",
+      "desc": "Cross-platform app that does X for Y audience.",
+      "stack": ["React Native", "Firebase"],
+      "link": "https://github.com/Brandfletch-Dev-Studio"
+    },
+    {
+      "id": "p5",
+      "tag": "Tool",
+      "title": "Project Name Five",
+      "desc": "A dev tool or CLI that makes life easier for developers.",
+      "stack": ["Go", "CLI", "OSS"],
+      "link": "https://github.com/Brandfletch-Dev-Studio"
+    },
+    {
+      "id": "p6",
+      "tag": "Web App",
+      "title": "Project Name Six",
+      "desc": "Full-stack application with real-time features.",
+      "stack": ["Next.js", "WebSocket", "Redis"],
+      "link": "https://github.com/Brandfletch-Dev-Studio"
+    }
+  ],
+  "services": [
+    { "id": "s1", "icon": "⬡", "title": "Web Apps", "desc": "Full-stack web applications — frontend, backend, database. Built to scale, designed to last." },
+    { "id": "s2", "icon": "⚙", "title": "Automations", "desc": "Workflows that run themselves. Cron jobs, webhooks, integrations — so you don't have to." },
+    { "id": "s3", "icon": "🔗", "title": "APIs & Integrations", "desc": "REST APIs, third-party integrations, and data pipelines that connect everything together." },
+    { "id": "s4", "icon": "▣", "title": "Mobile & More", "desc": "Responsive design, progressive web apps, and cross-platform solutions that work everywhere." }
+  ],
+  "about": {
+    "heading": "We're a dev studio that ships.",
+    "paragraphs": [
+      "Brandfletch Dev Studio builds software. Not slide decks, not roadmaps — actual working apps that people use. We work in the open on GitHub, and we believe good code speaks for itself.",
+      "Every project is treated like it's ours: clean architecture, thoughtful UX, and the kind of polish that comes from genuinely caring about the craft."
+    ],
+    "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
+  },
+  "stats": [
+    { "num": "∞", "label": "Cups of coffee" },
+    { "num": "100%", "label": "Open source" },
+    { "num": "0", "label": "Compromises" }
+  ],
+  "contact": {
+    "heading": "Let's build something.",
+    "sub": "Got a project in mind? Reach out — we're always up for a new build.",
+    "email": "hello@brandfletch.dev",
+    "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
+  },
+  "messages": []
+}
