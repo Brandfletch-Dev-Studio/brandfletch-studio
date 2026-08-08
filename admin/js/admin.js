@@ -46,7 +46,10 @@ function logout() {
 async function checkAuth() {
     if (!token) return false;
     try {
-        await fetchContent();
+        // /api/content is public now (the homepage needs it), so use
+        // /api/messages — a strictly auth-required endpoint — to verify
+        // this token is still valid.
+        await api('/api/messages');
         return true;
     } catch {
         localStorage.removeItem('adminToken');

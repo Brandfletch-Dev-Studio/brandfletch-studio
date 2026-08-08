@@ -1,5 +1,7 @@
 // /api/content — Read and update site content
 // Uses GitHub API to read/write content.json in the repo
+// GET is public (the homepage needs it) but strips private message data
+// unless the caller is authenticated. PUT always requires auth.
 
 const crypto = require('crypto');
 
@@ -75,16 +77,19 @@ module.exports = async (req, res) => {
 
     const token = getAuthHeader(req);
     const adminPassword = process.env.ADMIN_PASSWORD;
+    const isAuthed = !!verifyToken(token, adminPassword);
 
-    // GET — read content (requires auth)
+    // GET — read content. Public (homepage needs it), but only an
+    // authenticated admin gets the private `messages` array back.
     if (req.method === 'GET') {
-        if (!verifyToken(token, adminPassword)) {
-            res.status(401).json({ error: 'Unauthorized' });
-            return;
-        }
         try {
             const { content } = await fetchContent();
-            res.status(200).json(content);
+            if (!isAuthed) {
+                const { messages, ...publicContent } = content;
+                res.status(200).json(publicContent);
+            } else {
+                res.status(200).json(content);
+            }
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
@@ -93,7 +98,7 @@ module.exports = async (req, res) => {
 
     // PUT — update content (requires auth)
     if (req.method === 'PUT') {
-        if (!verifyToken(token, adminPassword)) {
+        if (!isAuthed) {
             res.status(401).json({ error: 'Unauthorized' });
             return;
         }
