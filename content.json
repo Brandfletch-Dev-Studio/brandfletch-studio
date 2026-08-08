@@ -10,8 +10,7 @@
         "Node.js",
         "PostgreSQL"
       ],
-      "link": "akonzi-sofa-furniture.vercel.app",
-      "featured": true
+      "link": "https://akonzi-sofa-furniture.vercel.app"
     },
     {
       "id": "p2",
@@ -23,8 +22,7 @@
         "Redis",
         "Docker"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio",
-      "featured": false
+      "link": "https://github.com/Brandfletch-Dev-Studio"
     },
     {
       "id": "p3",
@@ -36,8 +34,7 @@
         "Express",
         "MongoDB"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio",
-      "featured": false
+      "link": "https://github.com/Brandfletch-Dev-Studio"
     },
     {
       "id": "p4",
@@ -48,8 +45,7 @@
         "React Native",
         "Firebase"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio",
-      "featured": false
+      "link": "https://github.com/Brandfletch-Dev-Studio"
     },
     {
       "id": "p5",
@@ -61,8 +57,7 @@
         "CLI",
         "OSS"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio",
-      "featured": false
+      "link": "https://github.com/Brandfletch-Dev-Studio"
     },
     {
       "id": "p6",
@@ -74,32 +69,31 @@
         "WebSocket",
         "Redis"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio",
-      "featured": false
+      "link": "https://github.com/Brandfletch-Dev-Studio"
     }
   ],
   "services": [
     {
       "id": "s1",
-      "icon": "\u2b21",
+      "icon": "⬡",
       "title": "Web Apps",
-      "desc": "Full-stack web applications \u2014 frontend, backend, database. Built to scale, designed to last."
+      "desc": "Full-stack web applications — frontend, backend, database. Built to scale, designed to last."
     },
     {
       "id": "s2",
-      "icon": "\u2699",
+      "icon": "⚙",
       "title": "Automations",
-      "desc": "Workflows that run themselves. Cron jobs, webhooks, integrations \u2014 so you don't have to."
+      "desc": "Workflows that run themselves. Cron jobs, webhooks, integrations — so you don't have to."
     },
     {
       "id": "s3",
-      "icon": "\ud83d\udd17",
+      "icon": "🔗",
       "title": "APIs & Integrations",
       "desc": "REST APIs, third-party integrations, and data pipelines that connect everything together."
     },
     {
       "id": "s4",
-      "icon": "\u25a3",
+      "icon": "▣",
       "title": "Mobile & More",
       "desc": "Responsive design, progressive web apps, and cross-platform solutions that work everywhere."
     }
@@ -107,14 +101,14 @@
   "about": {
     "heading": "We're a dev studio that ships.",
     "paragraphs": [
-      "Brandfletch Dev Studio builds software. Not slide decks, not roadmaps \u2014 actual working apps that people use. We work in the open on GitHub, and we believe good code speaks for itself.",
+      "Brandfletch Dev Studio builds software. Not slide decks, not roadmaps — actual working apps that people use. We work in the open on GitHub, and we believe good code speaks for itself.",
       "Every project is treated like it's ours: clean architecture, thoughtful UX, and the kind of polish that comes from genuinely caring about the craft."
     ],
     "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
   },
   "stats": [
     {
-      "num": "\u221e",
+      "num": "∞",
       "label": "Cups of coffee"
     },
     {
@@ -128,7 +122,7 @@
   ],
   "contact": {
     "heading": "Let's build something.",
-    "sub": "Got a project in mind? Reach out \u2014 we're always up for a new build.",
+    "sub": "Got a project in mind? Reach out — we're always up for a new build.",
     "email": "hello@brandfletch.dev",
     "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
   },
