@@ -26,15 +26,15 @@
     },
     {
       "id": "p3",
-      "tag": "API",
-      "title": "Project Name Three",
-      "desc": "Something about this service, what it powers, who uses it.",
+      "title": "The Chibondo Academy ",
+      "tag": "Web App",
+      "desc": "An online learning platform for MSCE students in Malawi ",
       "stack": [
         "TypeScript",
         "Express",
         "MongoDB"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio"
+      "link": "https://chibondoacademy.com"
     },
     {
       "id": "p4",
