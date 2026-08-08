@@ -14,15 +14,15 @@
     },
     {
       "id": "p2",
-      "tag": "Automation",
-      "title": "Project Name Two",
-      "desc": "Another solid project description that explains the value.",
+      "title": "Brandfledger",
+      "tag": "Web App",
+      "desc": "Smart accounting software for service businesses ",
       "stack": [
         "Python",
         "Redis",
         "Docker"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio"
+      "link": "https://brandfledger-three.vercel.app"
     },
     {
       "id": "p3",
