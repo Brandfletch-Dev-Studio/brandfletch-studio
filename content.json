@@ -2,15 +2,15 @@
   "projects": [
     {
       "id": "p1",
+      "title": "Akonzi Sofa Furniture Website",
       "tag": "Web App",
-      "title": "Project Name One",
-      "desc": "A brief one-liner about what this app does and why it matters.",
+      "desc": "A complete online store for a furniture business, complete with Whatsapp first ordering, blog and a comprehensive admin panel.",
       "stack": [
         "React",
         "Node.js",
         "PostgreSQL"
       ],
-      "link": "https://github.com/Brandfletch-Dev-Studio"
+      "link": "akonzi-sofa-furniture.vercel.app"
     },
     {
       "id": "p2",
