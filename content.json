@@ -126,15 +126,5 @@
     "email": "hello@brandfletch.dev",
     "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
   },
-  "messages": [
-    {
-      "id": "m1786484167699",
-      "name": "Test",
-      "email": "test@test.com",
-      "subject": "Auth Test",
-      "message": "Testing token auth flow - safe to delete",
-      "date": "2026-08-11T21:36:07.699Z",
-      "read": false
-    }
-  ]
+  "messages": []
 }
