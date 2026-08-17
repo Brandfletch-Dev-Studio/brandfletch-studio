@@ -84,7 +84,7 @@
       "highlighted": false
     }
   ],
-  "hostingNote": "Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans run on reliable, managed reseller infrastructure with active uptime monitoring.",
+  "hostingNote": "Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans run on reliable, managed infrastructure with active uptime monitoring.",
   "addons": [
     {
       "id": "a1",
@@ -113,7 +113,11 @@
       "title": "Akonzi Sofa Furniture Website",
       "tag": "Web App",
       "desc": "A complete online store for a furniture business, complete with Whatsapp first ordering, blog and a comprehensive admin panel.",
-      "stack": ["React", "Node.js", "PostgreSQL"],
+      "stack": [
+        "React",
+        "Node.js",
+        "PostgreSQL"
+      ],
       "link": "https://akonzi-sofa-furniture.vercel.app"
     },
     {
@@ -121,7 +125,11 @@
       "title": "Brandfledger",
       "tag": "Web App",
       "desc": "Smart accounting software for service businesses ",
-      "stack": ["Python", "Redis", "Docker"],
+      "stack": [
+        "Python",
+        "Redis",
+        "Docker"
+      ],
       "link": "https://brandfledger-three.vercel.app"
     },
     {
@@ -129,7 +137,11 @@
       "title": "The Chibondo Academy ",
       "tag": "Web App",
       "desc": "An online learning platform for MSCE students in Malawi ",
-      "stack": ["TypeScript", "Express", "MongoDB"],
+      "stack": [
+        "TypeScript",
+        "Express",
+        "MongoDB"
+      ],
       "link": "https://chibondoacademy.com"
     },
     {
@@ -137,7 +149,10 @@
       "title": "Nyasadesk",
       "tag": "Team inbox saas",
       "desc": "Team Inbox software for sales teams",
-      "stack": ["React Native", "Firebase"],
+      "stack": [
+        "React Native",
+        "Firebase"
+      ],
       "link": "https://nyasadesk.com"
     },
     {
@@ -145,7 +160,11 @@
       "title": "Brandfletch Ads Platform ",
       "tag": "Ads Platform ",
       "desc": "Online ads ordering for businesses looking to reach new audiences ",
-      "stack": ["Go", "CLI", "OSS"],
+      "stack": [
+        "Go",
+        "CLI",
+        "OSS"
+      ],
       "link": "https://ads.brandfletch.com"
     },
     {
@@ -153,22 +172,35 @@
       "title": "Brandfletch Business Academy ",
       "tag": "Online school",
       "desc": "Online learning management system, featuring business courses for entrepreneurs looking to scale their businesses",
-      "stack": ["Next.js", "WebSocket", "Redis"],
+      "stack": [
+        "Next.js",
+        "WebSocket",
+        "Redis"
+      ],
       "link": "https://edu.brandfletch.com"
     }
   ],
   "about": {
     "heading": "A dev studio that also hosts what it builds.",
     "paragraphs": [
-      "Brandfletch Dev Studio designs and builds WordPress websites, then hosts them on our own reseller infrastructure — one team, one bill, in Malawi Kwacha.",
+      "Brandfletch Dev Studio designs and builds WordPress websites, then hosts them — one team, one bill, in Malawi Kwacha.",
       "Because we're also a full software studio, we're not limited to WordPress. If your business outgrows it, we can build the custom app or system you need next."
     ],
     "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
   },
   "stats": [
-    { "num": "50+", "label": "Websites built" },
-    { "num": "99.9%", "label": "Uptime guarantee" },
-    { "num": "24/7", "label": "Support monitoring" }
+    {
+      "num": "50+",
+      "label": "Websites built"
+    },
+    {
+      "num": "99.9%",
+      "label": "Uptime guarantee"
+    },
+    {
+      "num": "24/7",
+      "label": "Support monitoring"
+    }
   ],
   "contact": {
     "heading": "Let's build your website.",

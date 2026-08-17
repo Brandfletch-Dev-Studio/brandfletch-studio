@@ -43,7 +43,7 @@ const defaultContent = {
     about: {
         heading: 'A dev studio that also hosts what it builds.',
         paragraphs: [
-            'Brandfletch Dev Studio designs and builds WordPress websites, then hosts them on our own reseller infrastructure.',
+            'Brandfletch Dev Studio designs and builds WordPress websites, then hosts them.',
             'Because we are also a full software studio, we are not limited to WordPress.'
         ],
         githubUrl: 'https://github.com/Brandfletch-Dev-Studio'
