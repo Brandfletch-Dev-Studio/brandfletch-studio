@@ -15,7 +15,7 @@
     <!-- LOGIN -->
     <div id="loginScreen" class="login-screen">
         <div class="login-card">
-            <div class="login-logo"><span class="logo-mark">&lt;/&gt;</span> Brandfletch</div>
+            <div class="login-logo">Brandfletch</div>
             <h1>Admin Panel</h1>
             <p class="login-sub">Enter your password to access the dashboard.</p>
             <form id="loginForm">
@@ -31,18 +31,19 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <span class="logo-mark">&lt;/&gt;</span>
                 <span>Brandfletch</span>
             </div>
             <nav class="sidebar-nav">
-                <button class="nav-item active" data-view="overview"><span>◈</span> Overview</button>
-                <button class="nav-item" data-view="projects"><span>▣</span> Projects</button>
-                <button class="nav-item" data-view="services"><span>⚙</span> Services</button>
-                <button class="nav-item" data-view="about"><span>◉</span> About</button>
-                <button class="nav-item" data-view="messages"><span>✉</span> Messages <span id="msgBadge" class="badge hidden"></span></button>
+                <button class="nav-item active" data-view="overview">Overview</button>
+                <button class="nav-item" data-view="services">Services</button>
+                <button class="nav-item" data-view="hosting">Hosting Packages</button>
+                <button class="nav-item" data-view="addons">Add-ons</button>
+                <button class="nav-item" data-view="projects">Projects</button>
+                <button class="nav-item" data-view="about">About</button>
+                <button class="nav-item" data-view="messages">Messages <span id="msgBadge" class="badge hidden"></span></button>
             </nav>
             <div class="sidebar-footer">
-                <a href="/" target="_blank" class="sidebar-link">View Site →</a>
+                <a href="/" target="_blank" class="sidebar-link">View Site &#8594;</a>
                 <button id="logoutBtn" class="sidebar-link">Logout</button>
             </div>
         </aside>
@@ -54,15 +55,19 @@
                 <h1 class="view-title">Overview</h1>
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <span class="stat-num" id="statProjects">—</span>
-                        <span class="stat-label">Projects</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-num" id="statServices">—</span>
+                        <span class="stat-num" id="statServices">&mdash;</span>
                         <span class="stat-label">Services</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-num" id="statMessages">—</span>
+                        <span class="stat-num" id="statHosting">&mdash;</span>
+                        <span class="stat-label">Hosting Packages</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num" id="statProjects">&mdash;</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num" id="statMessages">&mdash;</span>
                         <span class="stat-label">Unread Messages</span>
                     </div>
                 </div>
@@ -74,17 +79,6 @@
                 </div>
             </div>
 
-            <!-- Projects -->
-            <div class="view" id="view-projects">
-                <div class="view-header">
-                    <h1 class="view-title">Projects</h1>
-                    <button class="btn btn-primary" onclick="openProjectEditor()">+ Add Project</button>
-                </div>
-                <div id="projectsList" class="data-list">
-                    <p class="muted">Loading...</p>
-                </div>
-            </div>
-
             <!-- Services -->
             <div class="view" id="view-services">
                 <div class="view-header">
@@ -92,6 +86,45 @@
                     <button class="btn btn-primary" onclick="openServiceEditor()">+ Add Service</button>
                 </div>
                 <div id="servicesList" class="data-list">
+                    <p class="muted">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Hosting Packages -->
+            <div class="view" id="view-hosting">
+                <div class="view-header">
+                    <h1 class="view-title">Hosting Packages</h1>
+                    <button class="btn btn-primary" onclick="openHostingEditor()">+ Add Package</button>
+                </div>
+                <div id="hostingList" class="data-list">
+                    <p class="muted">Loading...</p>
+                </div>
+                <div class="content-form" style="margin-top: 32px;">
+                    <label>Hosting note (shown below the pricing cards)</label>
+                    <textarea id="hostingNoteInput" rows="2"></textarea>
+                    <button class="btn btn-ghost" style="margin-top: 12px;" onclick="saveHostingNote()">Save Note</button>
+                    <p id="hostingNoteStatus" class="form-status"></p>
+                </div>
+            </div>
+
+            <!-- Add-ons -->
+            <div class="view" id="view-addons">
+                <div class="view-header">
+                    <h1 class="view-title">Add-ons</h1>
+                    <button class="btn btn-primary" onclick="openAddonEditor()">+ Add Add-on</button>
+                </div>
+                <div id="addonsList" class="data-list">
+                    <p class="muted">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Projects -->
+            <div class="view" id="view-projects">
+                <div class="view-header">
+                    <h1 class="view-title">Projects</h1>
+                    <button class="btn btn-primary" onclick="openProjectEditor()">+ Add Project</button>
+                </div>
+                <div id="projectsList" class="data-list">
                     <p class="muted">Loading...</p>
                 </div>
             </div>
@@ -125,6 +158,70 @@
         </main>
     </div>
 
+    <!-- Service Editor Modal -->
+    <div id="serviceModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="serviceModalTitle">Add Service</h2>
+            <form id="serviceForm">
+                <input type="hidden" id="serviceId">
+                <label>Title</label>
+                <input type="text" id="serviceTitle" required>
+                <label>Description</label>
+                <textarea id="serviceDesc" rows="3"></textarea>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" onclick="closeServiceModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hosting Package Editor Modal -->
+    <div id="hostingModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="hostingModalTitle">Add Package</h2>
+            <form id="hostingForm">
+                <input type="hidden" id="hostingId">
+                <label>Name</label>
+                <input type="text" id="hostingName" placeholder="Starter, Business, Agency..." required>
+                <label>Tagline</label>
+                <input type="text" id="hostingTagline" placeholder="For a single site that just needs to be online.">
+                <label>Price per month (MWK)</label>
+                <input type="number" id="hostingPriceMonthly" min="0" step="500" required>
+                <label>Price per year (MWK)</label>
+                <input type="number" id="hostingPriceYearly" min="0" step="1000" required>
+                <label>Features (one per line)</label>
+                <textarea id="hostingFeatures" rows="5" placeholder="1 WordPress website&#10;5GB SSD storage&#10;Free SSL certificate"></textarea>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="hostingHighlighted">
+                    Highlighted — show "Most Popular" badge
+                </label>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" onclick="closeHostingModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add-on Editor Modal -->
+    <div id="addonModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="addonModalTitle">Add Add-on</h2>
+            <form id="addonForm">
+                <input type="hidden" id="addonId">
+                <label>Title</label>
+                <input type="text" id="addonTitle" required>
+                <label>Description</label>
+                <textarea id="addonDesc" rows="3"></textarea>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" onclick="closeAddonModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Project Editor Modal -->
     <div id="projectModal" class="modal hidden">
         <div class="modal-content">
@@ -147,26 +244,6 @@
                 </label>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-ghost" onclick="closeProjectModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Service Editor Modal -->
-    <div id="serviceModal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="serviceModalTitle">Add Service</h2>
-            <form id="serviceForm">
-                <input type="hidden" id="serviceId">
-                <label>Icon (emoji or symbol)</label>
-                <input type="text" id="serviceIcon" placeholder="⬡">
-                <label>Title</label>
-                <input type="text" id="serviceTitle" required>
-                <label>Description</label>
-                <textarea id="serviceDesc" rows="3"></textarea>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-ghost" onclick="closeServiceModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>

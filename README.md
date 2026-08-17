@@ -1,41 +1,59 @@
 # Brandfletch Dev Studio Website
 
-Static website for Brandfletch Dev Studio. Built with vanilla HTML, CSS, and JS — no build step, no dependencies.
+Static website for Brandfletch Dev Studio — a WordPress website design and hosting business, backed by a full software dev studio. Built with vanilla HTML, CSS, and JS — no build step, no dependencies.
 
-## Deploy to GitHub Pages
+## What this site does
 
-1. **Create a new repo on GitHub** named `brandfletch-studio` (or whatever you like)
-2. Push these files to the repo:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial website"
-   git branch -M main
-   git remote add origin https://github.com/brandfletch/brandfletch-studio.git
-   git push -u origin main
-   ```
-3. Go to the repo **Settings → Pages**
-4. Under **Source**, select `main` branch and `/ (root)` folder
-5. Save — your site will be live at `https://brandfletch.github.io/brandfletch-studio/` in a minute or two
+- Sells WordPress website design & build services
+- Sells tiered hosting packages, billed in Malawi Kwacha (MWK)
+- Lists add-on services (domain registration, business email, e-commerce setup, SEO)
+- Showcases past dev studio projects as proof of technical capability
+- Includes a password-protected admin panel (`/admin`) for editing all content without touching code
+
+## Content is data-driven
+
+All homepage content — services, hosting packages, add-ons, projects, about section, stats, and contact info — lives in `content.json` and is edited through the admin panel at `/admin`. The homepage fetches it via `/api/content` at load time.
+
+## Admin panel
+
+Go to `/admin`, log in with the `ADMIN_PASSWORD` environment variable, and edit:
+- Services
+- Hosting Packages (name, pricing in MWK, features, highlight badge)
+- Add-ons
+- Projects
+- About section & stats
+- Contact form messages
+
+Changes are committed straight to `content.json` in this repo via the GitHub API.
+
+## Environment variables (Vercel)
+
+- `GITHUB_TOKEN` — token with write access to this repo, used by `/api/content` to read/update `content.json`
+- `ADMIN_PASSWORD` — password for the admin panel
+
+## Deploy to Vercel
+
+This repo is set up to deploy directly on Vercel with serverless functions in `/api`. Push to `main` and Vercel picks it up automatically.
 
 ## Customizing
 
+### Hosting Packages & Pricing
+Edit through `/admin` → Hosting Packages. Prices are entered in Malawi Kwacha (MWK).
+
+### Services & Add-ons
+Edit through `/admin` → Services / Add-ons.
+
 ### Projects
-Edit `js/main.js` — the `projects` array at the top. Add, remove, or modify entries. Each project has:
-- `tag` — category label (Web App, API, Tool, etc.)
-- `title` — project name
-- `desc` — short description
-- `stack` — array of tech tags
-- `link` — GitHub or live URL
+Edit through `/admin` → Projects. Mark a project "Featured" to have it show on the homepage; if nothing is marked featured, all projects show.
 
 ### Colors
 Edit the CSS variables at the top of `css/style.css` under `:root`.
 
 ### Contact Info
-Update the email address and GitHub links in `index.html`.
+Update through `/admin` → About, or directly in `content.json`.
 
 ### Favicon
 Replace `assets/favicon.svg` with your own.
 
-## Custom Domain (optional)
-In GitHub Pages settings, add your custom domain under **Custom domain**. Add a `CNAME` file with your domain name if needed.
+## Custom Domain
+In Vercel project settings, add your custom domain under **Domains**.

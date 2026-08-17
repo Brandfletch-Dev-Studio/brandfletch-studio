@@ -79,12 +79,6 @@ a {
     font-size: 1.1rem;
 }
 
-.logo-mark {
-    font-family: var(--font-mono);
-    color: var(--accent);
-    font-size: 1.2rem;
-}
-
 .nav-links {
     display: flex;
     list-style: none;
@@ -396,12 +390,6 @@ section {
     transform: translateY(-3px);
 }
 
-.service-icon {
-    font-size: 1.8rem;
-    color: var(--accent);
-    margin-bottom: 16px;
-}
-
 .service-card h3 {
     font-size: 1.2rem;
     margin-bottom: 10px;
@@ -574,11 +562,6 @@ section {
     transform: translateY(-2px);
 }
 
-.contact-icon {
-    font-size: 1.2rem;
-    color: var(--accent);
-}
-
 /* --- Footer --- */
 footer {
     border-top: 1px solid var(--border);
@@ -704,5 +687,157 @@ footer {
 
     .btn {
         width: 100%;
+    }
+}
+
+/* --- Pricing / Hosting --- */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.pricing-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: all 0.3s var(--ease);
+}
+
+.pricing-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.pricing-card-highlight {
+    border-color: var(--accent);
+    box-shadow: 0 0 40px var(--accent-glow);
+}
+
+.pricing-badge {
+    position: absolute;
+    top: -12px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+}
+
+.pricing-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.pricing-tagline {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    min-height: 42px;
+}
+
+.pricing-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.pricing-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.pricing-period {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.pricing-yearly {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    margin-bottom: 24px;
+}
+
+.pricing-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex: 1;
+}
+
+.pricing-features li {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding-left: 18px;
+    position: relative;
+}
+
+.pricing-features li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+.pricing-cta {
+    width: 100%;
+}
+
+.hosting-note {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 32px;
+    max-width: 640px;
+    line-height: 1.6;
+}
+
+/* --- Add-ons --- */
+.addon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.addon-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: all 0.3s var(--ease);
+}
+
+.addon-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.addon-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.addon-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .pricing-grid {
+        grid-template-columns: 1fr;
     }
 }

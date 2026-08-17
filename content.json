@@ -1,15 +1,119 @@
 {
+  "hero": {
+    "tag": "Brandfletch Dev Studio",
+    "headingPre": "We build",
+    "headingAccent": "WordPress websites",
+    "headingPost": "and host them right.",
+    "sub": "Tell us what you need, we design and build your WordPress site, then keep it fast, secure, and online — with hosting billed simply in Malawi Kwacha.",
+    "ctaPrimaryLabel": "See Hosting Plans",
+    "ctaPrimaryHref": "#hosting",
+    "ctaSecondaryLabel": "Start a Project",
+    "ctaSecondaryHref": "#contact"
+  },
+  "services": [
+    {
+      "id": "s1",
+      "title": "WordPress Website Design & Build",
+      "desc": "A custom-designed WordPress site built around your business — from simple brochure sites to full booking and e-commerce builds."
+    },
+    {
+      "id": "s2",
+      "title": "Website Migration",
+      "desc": "Already have a site elsewhere? We move it to our hosting with zero downtime and no lost content."
+    },
+    {
+      "id": "s3",
+      "title": "Care & Maintenance Plans",
+      "desc": "Ongoing updates, security patches, and backups. Your site stays current and protected without you lifting a finger."
+    },
+    {
+      "id": "s4",
+      "title": "Custom Web Apps & Automations",
+      "desc": "Outgrown WordPress? As a full dev studio, we can build the custom app, API, or automation your business needs next."
+    }
+  ],
+  "hostingPackages": [
+    {
+      "id": "h1",
+      "name": "Starter",
+      "tagline": "For a single site that just needs to be online and fast.",
+      "priceMonthlyMWK": 8000,
+      "priceYearlyMWK": 80000,
+      "features": [
+        "1 WordPress website",
+        "5GB SSD storage",
+        "Free SSL certificate",
+        "5 professional email accounts",
+        "Weekly backups",
+        "Standard support"
+      ],
+      "highlighted": false
+    },
+    {
+      "id": "h2",
+      "name": "Business",
+      "tagline": "For businesses running a few sites that need to stay online.",
+      "priceMonthlyMWK": 18000,
+      "priceYearlyMWK": 180000,
+      "features": [
+        "Up to 5 WordPress websites",
+        "20GB SSD storage",
+        "Free SSL certificate",
+        "20 professional email accounts",
+        "Daily backups",
+        "Free migration from your current host",
+        "Priority support"
+      ],
+      "highlighted": true
+    },
+    {
+      "id": "h3",
+      "name": "Agency",
+      "tagline": "For agencies and businesses managing many client sites.",
+      "priceMonthlyMWK": 35000,
+      "priceYearlyMWK": 350000,
+      "features": [
+        "Unlimited WordPress websites",
+        "50GB SSD storage",
+        "Free SSL certificates",
+        "Unlimited email accounts",
+        "Daily backups & malware scanning",
+        "Dedicated support contact",
+        "White-label option for reselling"
+      ],
+      "highlighted": false
+    }
+  ],
+  "hostingNote": "Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans run on reliable, managed reseller infrastructure with active uptime monitoring.",
+  "addons": [
+    {
+      "id": "a1",
+      "title": "Domain Registration",
+      "desc": ".com, .mw, and most other extensions — registered and pointed to your site for you."
+    },
+    {
+      "id": "a2",
+      "title": "Business Email",
+      "desc": "Professional @yourdomain email addresses, set up and ready to use on your phone and computer."
+    },
+    {
+      "id": "a3",
+      "title": "E-commerce Setup",
+      "desc": "WooCommerce store setup with mobile money and card payment options configured for you."
+    },
+    {
+      "id": "a4",
+      "title": "SEO & Speed Optimization",
+      "desc": "Get found on Google and load fast for visitors, even on slower connections."
+    }
+  ],
   "projects": [
     {
       "id": "p1",
       "title": "Akonzi Sofa Furniture Website",
       "tag": "Web App",
       "desc": "A complete online store for a furniture business, complete with Whatsapp first ordering, blog and a comprehensive admin panel.",
-      "stack": [
-        "React",
-        "Node.js",
-        "PostgreSQL"
-      ],
+      "stack": ["React", "Node.js", "PostgreSQL"],
       "link": "https://akonzi-sofa-furniture.vercel.app"
     },
     {
@@ -17,11 +121,7 @@
       "title": "Brandfledger",
       "tag": "Web App",
       "desc": "Smart accounting software for service businesses ",
-      "stack": [
-        "Python",
-        "Redis",
-        "Docker"
-      ],
+      "stack": ["Python", "Redis", "Docker"],
       "link": "https://brandfledger-three.vercel.app"
     },
     {
@@ -29,11 +129,7 @@
       "title": "The Chibondo Academy ",
       "tag": "Web App",
       "desc": "An online learning platform for MSCE students in Malawi ",
-      "stack": [
-        "TypeScript",
-        "Express",
-        "MongoDB"
-      ],
+      "stack": ["TypeScript", "Express", "MongoDB"],
       "link": "https://chibondoacademy.com"
     },
     {
@@ -41,10 +137,7 @@
       "title": "Nyasadesk",
       "tag": "Team inbox saas",
       "desc": "Team Inbox software for sales teams",
-      "stack": [
-        "React Native",
-        "Firebase"
-      ],
+      "stack": ["React Native", "Firebase"],
       "link": "https://nyasadesk.com"
     },
     {
@@ -52,11 +145,7 @@
       "title": "Brandfletch Ads Platform ",
       "tag": "Ads Platform ",
       "desc": "Online ads ordering for businesses looking to reach new audiences ",
-      "stack": [
-        "Go",
-        "CLI",
-        "OSS"
-      ],
+      "stack": ["Go", "CLI", "OSS"],
       "link": "https://ads.brandfletch.com"
     },
     {
@@ -64,65 +153,26 @@
       "title": "Brandfletch Business Academy ",
       "tag": "Online school",
       "desc": "Online learning management system, featuring business courses for entrepreneurs looking to scale their businesses",
-      "stack": [
-        "Next.js",
-        "WebSocket",
-        "Redis"
-      ],
+      "stack": ["Next.js", "WebSocket", "Redis"],
       "link": "https://edu.brandfletch.com"
     }
   ],
-  "services": [
-    {
-      "id": "s1",
-      "icon": "⬡",
-      "title": "Web Apps",
-      "desc": "Full-stack web applications — frontend, backend, database. Built to scale, designed to last."
-    },
-    {
-      "id": "s2",
-      "icon": "⚙",
-      "title": "Automations",
-      "desc": "Workflows that run themselves. Cron jobs, webhooks, integrations — so you don't have to."
-    },
-    {
-      "id": "s3",
-      "icon": "🔗",
-      "title": "APIs & Integrations",
-      "desc": "REST APIs, third-party integrations, and data pipelines that connect everything together."
-    },
-    {
-      "id": "s4",
-      "icon": "▣",
-      "title": "Mobile & More",
-      "desc": "Responsive design, progressive web apps, and cross-platform solutions that work everywhere."
-    }
-  ],
   "about": {
-    "heading": "We're a dev studio that ships.",
+    "heading": "A dev studio that also hosts what it builds.",
     "paragraphs": [
-      "Brandfletch Dev Studio builds software. Not slide decks, not roadmaps — actual working apps that people use. We work in the open on GitHub, and we believe good code speaks for itself.",
-      "Every project is treated like it's ours: clean architecture, thoughtful UX, and the kind of polish that comes from genuinely caring about the craft."
+      "Brandfletch Dev Studio designs and builds WordPress websites, then hosts them on our own reseller infrastructure — one team, one bill, in Malawi Kwacha.",
+      "Because we're also a full software studio, we're not limited to WordPress. If your business outgrows it, we can build the custom app or system you need next."
     ],
     "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
   },
   "stats": [
-    {
-      "num": "∞",
-      "label": "Cups of coffee"
-    },
-    {
-      "num": "100%",
-      "label": "Open source"
-    },
-    {
-      "num": "0",
-      "label": "Compromises"
-    }
+    { "num": "50+", "label": "Websites built" },
+    { "num": "99.9%", "label": "Uptime guarantee" },
+    { "num": "24/7", "label": "Support monitoring" }
   ],
   "contact": {
-    "heading": "Let's build something.",
-    "sub": "Got a project in mind? Reach out — we're always up for a new build.",
+    "heading": "Let's build your website.",
+    "sub": "Tell us about your business — we'll design, build, and host your WordPress site from start to finish.",
     "email": "hello@brandfletch.dev",
     "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
   },
