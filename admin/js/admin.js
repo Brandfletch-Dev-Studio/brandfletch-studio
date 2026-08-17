@@ -271,7 +271,6 @@ function renderAbout() {
     document.getElementById('aboutHeading').value = about.heading || '';
     document.getElementById('aboutP1').value = about.paragraphs?.[0] || '';
     document.getElementById('aboutP2').value = about.paragraphs?.[1] || '';
-    document.getElementById('aboutGithub').value = about.githubUrl || '';
 
     const statsEditor = document.getElementById('statsEditor');
     const stats = content.stats || [];
@@ -578,7 +577,6 @@ async function saveAbout() {
             document.getElementById('aboutP1').value,
             document.getElementById('aboutP2').value
         ].filter(Boolean),
-        githubUrl: document.getElementById('aboutGithub').value
     };
 
     // Stats

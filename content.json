@@ -185,8 +185,7 @@
     "paragraphs": [
       "Brandfletch Dev Studio designs and builds WordPress websites, then hosts them — one team, one bill, in Malawi Kwacha.",
       "Because we're also a full software studio, we're not limited to WordPress. If your business outgrows it, we can build the custom app or system you need next."
-    ],
-    "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
+    ]
   },
   "stats": [
     {
@@ -205,8 +204,7 @@
   "contact": {
     "heading": "Let's build your website.",
     "sub": "Tell us about your business — we'll design, build, and host your WordPress site from start to finish.",
-    "email": "hello@brandfletch.dev",
-    "githubUrl": "https://github.com/Brandfletch-Dev-Studio"
+    "email": "hello@brandfletch.dev"
   },
   "messages": []
 }

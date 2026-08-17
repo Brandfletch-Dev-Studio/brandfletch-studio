@@ -38,7 +38,7 @@ const defaultContent = {
         { title: 'SEO & Speed Optimization', desc: 'Get found on Google and load fast.' }
     ],
     projects: [
-        { tag: 'Web App', title: 'Project Name One', desc: 'A brief one-liner about what this app does and why it matters.', stack: ['React', 'Node.js', 'PostgreSQL'], link: 'https://github.com/Brandfletch-Dev-Studio' }
+        { tag: 'Web App', title: 'Project Name One', desc: 'A brief one-liner about what this app does and why it matters.', stack: ['React', 'Node.js', 'PostgreSQL'] }
     ],
     about: {
         heading: 'A dev studio that also hosts what it builds.',
@@ -46,7 +46,6 @@ const defaultContent = {
             'Brandfletch Dev Studio designs and builds WordPress websites, then hosts them.',
             'Because we are also a full software studio, we are not limited to WordPress.'
         ],
-        githubUrl: 'https://github.com/Brandfletch-Dev-Studio'
     },
     stats: [
         { num: '50+', label: 'Websites built' },
@@ -57,7 +56,6 @@ const defaultContent = {
         heading: "Let's build your website.",
         sub: "Tell us about your business — we'll design, build, and host your WordPress site.",
         email: 'hello@brandfletch.dev',
-        githubUrl: 'https://github.com/Brandfletch-Dev-Studio'
     }
 };
 
@@ -174,8 +172,6 @@ function renderAbout() {
     const p2 = document.getElementById('aboutP2');
     if (p1) p1.textContent = (about.paragraphs && about.paragraphs[0]) || '';
     if (p2) p2.textContent = (about.paragraphs && about.paragraphs[1]) || '';
-    const githubLink = document.getElementById('aboutGithubLink');
-    if (githubLink && about.githubUrl) githubLink.href = about.githubUrl;
 
     const statsWrap = document.getElementById('aboutStats');
     const stats = siteContent.stats || defaultContent.stats;
@@ -198,8 +194,6 @@ function renderContact() {
         emailLink.href = 'mailto:' + contact.email;
         emailLink.querySelector('span').textContent = contact.email;
     }
-    const githubLink = document.getElementById('contactGithubLink');
-    if (githubLink && contact.githubUrl) githubLink.href = contact.githubUrl;
 }
 
 // --- Nav Scroll Effect ---
