@@ -269,7 +269,7 @@
     }
 
     // --- Validation ---
-    function validateStep1() { return true; }
+    function validateStep1() { return null; }
 
     function validateStep2() {
         if (domainAction === 'register') {
