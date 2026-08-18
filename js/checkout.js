@@ -294,7 +294,7 @@
     function validateStep2() {
         if (domainAction === 'register') {
             if (!savedDomain) return 'Please enter a domain name';
-            if (domainAvailable !== true) return 'Please check domain availability first';
+            if (domainAvailable === false) return "This domain is already registered. Try another or use the existing domain option.";
         } else {
             if (!savedExistingDomain) return 'Please enter your existing domain name';
         }
