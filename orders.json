@@ -17,5 +17,25 @@
     "whmPlan": "cp_starter",
     "status": "pending",
     "createdAt": "2026-08-18T02:48:59.130Z"
+  },
+  {
+    "txRef": "BF-1787025560494-039de2",
+    "plan": "wordpress-starter",
+    "planName": "WordPress Starter",
+    "billing": "monthly",
+    "amount": 45000,
+    "hostingFee": 30000,
+    "domainFee": 15000,
+    "domain": "crazychessbattles.com",
+    "domainAction": "register",
+    "domainPurchasePriceUsd": null,
+    "email": "geniuspulse22@gmail.com",
+    "firstName": "Arthur",
+    "lastName": "Chibondo",
+    "cpanelUser": "crazychee5",
+    "cpanelPassword": "mbh3XptmT!SCT4HJ",
+    "whmPlan": "wp_starter",
+    "status": "pending",
+    "createdAt": "2026-08-18T03:59:20.494Z"
   }
 ]
