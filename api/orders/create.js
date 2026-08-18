@@ -3,7 +3,7 @@
 // Body: { plan, category, billing, domain, domainAction, firstName, lastName, email, password }
 
 const crypto = require('crypto');
-const { checkAvailability } = require('../lib/namecom');
+// Domain check now uses Namecheap (loaded dynamically in getDomainPrice)
 
 const MWK_PER_USD = 6000;
 const DOMAIN_MARKUP = 1.15;
@@ -50,21 +50,26 @@ function getDomainPriceFallback(domain) {
     return DOMAIN_PRICES[tld] || 18000; // default
 }
 
-// Authoritative domain price — always re-checked server-side against name.com
+// Authoritative domain price — re-checked server-side against Namecheap
 // so the charged amount can never be manipulated by the client.
 async function getDomainPrice(domain) {
-    if (process.env.NAMECOM_USERNAME && process.env.NAMECOM_API_TOKEN) {
+    if (process.env.NAMECHEAP_API_USER && process.env.NAMECHEAP_API_KEY) {
         try {
+            const { checkAvailability } = require('../lib/namecheap');
             const result = await checkAvailability(domain);
-            if (result.purchasable && result.purchasePrice) {
-                return {
-                    price: Math.round(result.purchasePrice * MWK_PER_USD * DOMAIN_MARKUP),
-                    purchasePriceUsd: result.purchasePrice,
-                    premium: result.premium
-                };
+            if (result.available) {
+                let priceMwk;
+                let priceUsd = null;
+                if (result.premium && result.premiumPriceUsd) {
+                    priceUsd = result.premiumPriceUsd;
+                    priceMwk = Math.round(priceUsd * MWK_PER_USD * DOMAIN_MARKUP);
+                } else {
+                    priceMwk = getDomainPriceFallback(domain);
+                }
+                return { price: priceMwk, purchasePriceUsd: priceUsd, premium: result.premium };
             }
         } catch (err) {
-            console.error('name.com price check failed, using fallback pricing:', err.message);
+            console.error('Namecheap price check failed, using fallback pricing:', err.message);
         }
     }
     return { price: getDomainPriceFallback(domain), purchasePriceUsd: null, premium: false };

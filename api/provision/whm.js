@@ -1,10 +1,6 @@
 // /api/provision/whm — Create a cPanel account via WHM API 1
 // Called internally by the verify endpoint after payment confirmation.
 
-// WHM API 1 createacct:
-// GET https://server:2087/json-api/createacct?api.version=1&username=X&domain=X&plan=X&password=X&contactemail=X
-// Auth header: "Authorization: whm username:APITOKEN"
-
 async function createCpanelAccount(order) {
     const WHM_HOST = process.env.WHM_HOST;
     const WHM_USER = process.env.WHM_USER;
@@ -23,12 +19,12 @@ async function createCpanelAccount(order) {
         contactemail: order.email
     });
 
-    const url = `https://${WHM_HOST}:2087/json-api/createacct?${params.toString()}`;
+    const url = 'https://' + WHM_HOST + ':2087/json-api/createacct?' + params.toString();
 
     const response = await fetch(url, {
         method: 'GET',
         headers: {
-            'Authorization': `whm ${WHM_USER}:${WHM_TOKEN}`,
+            'Authorization': 'whm ' + WHM_USER + ':' + WHM_TOKEN,
             'Accept': 'application/json'
         },
         signal: AbortSignal.timeout(30000)
@@ -44,24 +40,22 @@ async function createCpanelAccount(order) {
             message: 'cPanel account created successfully'
         };
     } else {
-        const errMsg = data.metadata?.reason || data.errors?.join(', ') || 'Unknown WHM API error';
-        throw new Error(`WHM provisioning failed: ${errMsg}`);
+        const errMsg = (data.metadata && data.metadata.reason) || (data.errors && data.errors.join(', ')) || 'Unknown WHM API error';
+        throw new Error('WHM provisioning failed: ' + errMsg);
     }
 }
 
-// Register a domain via name.com API and point it at our hosting nameservers.
-// Domain is registered under the Brandfletch Dev Studio account as registrant.
-const { createDomain, setNameservers } = require('../lib/namecom');
+// Register a domain via Namecheap API and point it at our hosting nameservers.
+// Domain is registered under the Brandfletch Dev Studio Namecheap account.
+const { createDomain, setNameservers } = require('../lib/namecheap');
 
-// Nameservers your reseller hosting plan uses for cPanel/WordPress hosting.
-// Update these to match unlimitedwebhosting.co.uk's assigned nameservers.
 const HOSTING_NAMESERVERS = (process.env.HOSTING_NAMESERVERS || '')
     .split(',')
     .map(ns => ns.trim())
     .filter(Boolean);
 
 async function registerDomain(order) {
-    if (!process.env.NAMECOM_USERNAME || !process.env.NAMECOM_API_TOKEN) {
+    if (!process.env.NAMECHEAP_API_USER || !process.env.NAMECHEAP_API_KEY) {
         return {
             success: false,
             pending: true,
@@ -71,15 +65,15 @@ async function registerDomain(order) {
     }
 
     try {
-        const purchaseOptions = { years: 1 };
-        if (order.domainPurchasePriceUsd) {
-            purchaseOptions.purchasePrice = order.domainPurchasePriceUsd;
-        }
+        // Register domain with hosting nameservers set during creation
+        const result = await createDomain(order.domain, {
+            years: 1,
+            nameservers: HOSTING_NAMESERVERS
+        });
 
-        const result = await createDomain(order.domain, purchaseOptions);
-
-        // Point the new domain at our hosting nameservers so the site resolves
-        if (HOSTING_NAMESERVERS.length >= 2) {
+        // If nameservers weren't set during create (less than 2 provided),
+        // try setting them separately
+        if (HOSTING_NAMESERVERS.length >= 2 && !result.nameserversSet) {
             try {
                 await setNameservers(order.domain, HOSTING_NAMESERVERS);
                 result.nameserversSet = true;
@@ -93,9 +87,10 @@ async function registerDomain(order) {
         return {
             success: true,
             domain: order.domain,
-            order: result.order,
-            totalPaid: result.totalPaid,
-            nameserversSet: result.nameserversSet || false,
+            orderId: result.orderId,
+            transactionId: result.transactionId,
+            chargedAmount: result.chargedAmount,
+            nameserversSet: result.nameserversSet || (HOSTING_NAMESERVERS.length >= 2),
             message: 'Domain registered successfully'
         };
     } catch (err) {
@@ -103,7 +98,7 @@ async function registerDomain(order) {
             success: false,
             pending: true,
             domain: order.domain,
-            message: `Domain registration failed: ${err.message}. Account created but domain needs manual registration.`
+            message: 'Domain registration failed: ' + err.message + '. Account created but domain needs manual registration.'
         };
     }
 }
