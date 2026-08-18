@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "txRef": "BF-1787021339129-f65674",
+    "plan": "cpanel-starter",
+    "planName": "cPanel Starter",
+    "billing": "monthly",
+    "amount": 18000,
+    "hostingFee": 18000,
+    "domainFee": 0,
+    "domain": "test.com",
+    "domainAction": "existing",
+    "email": "test@test.com",
+    "firstName": "",
+    "lastName": "",
+    "cpanelUser": "test19",
+    "cpanelPassword": "FbEB6H9tU79avzKH",
+    "whmPlan": "cp_starter",
+    "status": "pending",
+    "createdAt": "2026-08-18T02:48:59.130Z"
+  }
+]
