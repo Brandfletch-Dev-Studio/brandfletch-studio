@@ -55,7 +55,7 @@ const HOSTING_NAMESERVERS = (process.env.HOSTING_NAMESERVERS || '')
     .filter(Boolean);
 
 async function registerDomain(order) {
-    if (!process.env.NAMECHEAP_API_USER || !process.env.NAMECHEAP_API_KEY) {
+    if (!require('../lib/namecheap').isConfigured()) {
         return {
             success: false,
             pending: true,

@@ -53,7 +53,7 @@ function getDomainPriceFallback(domain) {
 // Authoritative domain price — re-checked server-side against Namecheap
 // so the charged amount can never be manipulated by the client.
 async function getDomainPrice(domain) {
-    if (process.env.NAMECHEAP_API_USER && process.env.NAMECHEAP_API_KEY) {
+    if (require('../lib/namecheap').isConfigured()) {
         try {
             const { checkAvailability } = require('../lib/namecheap');
             const result = await checkAvailability(domain);

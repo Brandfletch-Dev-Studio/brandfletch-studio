@@ -50,9 +50,9 @@ module.exports = async (req, res) => {
     }
 
     // Prefer Namecheap — gives real availability
-    if (process.env.NAMECHEAP_API_USER && process.env.NAMECHEAP_API_KEY) {
+    const { checkAvailability, isConfigured } = require('../lib/namecheap');
+    if (isConfigured()) {
         try {
-            const { checkAvailability } = require('../lib/namecheap');
             const result = await checkAvailability(domain);
 
             if (!result.available) {
