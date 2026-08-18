@@ -11,21 +11,33 @@
 }
 
 :root {
-    --bg: #0a0a0f;
-    --bg-elev: #131320;
-    --bg-card: #16161f;
-    --border: #252533;
-    --text: #e8e8f0;
-    --text-muted: #8888a0;
+    --bg: #ffffff;
+    --bg-elev: #f6f6f9;
+    --bg-card: #ffffff;
+    --border: #e5e5ec;
+    --text: #14141c;
+    --text-muted: #6b6b7d;
     --accent: #7c5cff;
-    --accent-glow: rgba(124, 92, 255, 0.15);
-    --accent-hover: #9479ff;
+    --accent-glow: rgba(124, 92, 255, 0.10);
+    --accent-hover: #6a45f5;
     --radius: 14px;
     --radius-sm: 8px;
     --max-w: 1100px;
     --font-display: 'Space Grotesk', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark theme override — opt in via data-theme="dark" on <html> */
+[data-theme="dark"] {
+    --bg: #0a0a0f;
+    --bg-elev: #131320;
+    --bg-card: #16161f;
+    --border: #252533;
+    --text: #e8e8f0;
+    --text-muted: #8888a0;
+    --accent-glow: rgba(124, 92, 255, 0.15);
+    --accent-hover: #9479ff;
 }
 
 html {
@@ -64,11 +76,15 @@ a {
 }
 
 #nav.scrolled {
-    background: rgba(10, 10, 15, 0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom-color: var(--border);
     padding: 12px 32px;
+}
+
+[data-theme="dark"] #nav.scrolled {
+    background: rgba(10, 10, 15, 0.85);
 }
 
 .nav-logo {
