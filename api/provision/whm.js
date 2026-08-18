@@ -47,7 +47,7 @@ async function createCpanelAccount(order) {
 
 // Register a domain via Namecheap API and point it at our hosting nameservers.
 // Domain is registered under the Brandfletch Dev Studio Namecheap account.
-const { createDomain, setNameservers } = require('../lib/namecheap');
+const { createDomain, setNameservers } = require('../../lib/namecheap');
 
 const HOSTING_NAMESERVERS = (process.env.HOSTING_NAMESERVERS || '')
     .split(',')
@@ -55,7 +55,7 @@ const HOSTING_NAMESERVERS = (process.env.HOSTING_NAMESERVERS || '')
     .filter(Boolean);
 
 async function registerDomain(order) {
-    if (!require('../lib/namecheap').isConfigured()) {
+    if (!require('../../lib/namecheap').isConfigured()) {
         return {
             success: false,
             pending: true,

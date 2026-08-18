@@ -49,9 +49,9 @@ function getDomainPriceFallback(domain) {
 }
 
 async function getDomainPrice(domain) {
-    if (require('../lib/namecheap').isConfigured()) {
+    if (require('../../lib/namecheap').isConfigured()) {
         try {
-            const { checkAvailability } = require('../lib/namecheap');
+            const { checkAvailability } = require('../../lib/namecheap');
             const result = await checkAvailability(domain);
             if (result.available) {
                 let priceMwk;
@@ -113,7 +113,7 @@ module.exports = async (req, res) => {
         const cpanelUser = domain.split('.')[0].toLowerCase().substring(0, 8) + crypto.randomBytes(1).toString('hex');
 
         // Find or create customer record
-        const supabase = require('../lib/supabase');
+        const supabase = require('../../lib/supabase');
         let customerId = null;
         
         if (supabase.isConfigured()) {

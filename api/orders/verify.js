@@ -6,7 +6,7 @@
 const { createCpanelAccount, registerDomain } = require('../provision/whm');
 
 async function findOrder(txRef) {
-    const supabase = require('../lib/supabase');
+    const supabase = require('../../lib/supabase');
     if (!supabase.isConfigured()) return { order: null };
     
     const order = await supabase.select('orders', { tx_ref: txRef }, true);
@@ -40,7 +40,7 @@ async function findOrder(txRef) {
 }
 
 async function updateOrderStatus(txRef, updates) {
-    const supabase = require('../lib/supabase');
+    const supabase = require('../../lib/supabase');
     if (!supabase.isConfigured()) return;
     
     // Map the legacy update keys to Supabase columns
@@ -193,7 +193,7 @@ module.exports = async (req, res) => {
 
         // Create hosting account record in Supabase if provisioned
         if (provisioningResult && provisioningResult.success) {
-            const supabase = require('../lib/supabase');
+            const supabase = require('../../lib/supabase');
             if (supabase.isConfigured()) {
                 try {
                     await supabase.insert('hosting_accounts', {
@@ -213,7 +213,7 @@ module.exports = async (req, res) => {
 
         // Create domain record in Supabase if registered
         if (domainResult && domainResult.success) {
-            const supabase = require('../lib/supabase');
+            const supabase = require('../../lib/supabase');
             if (supabase.isConfigured()) {
                 try {
                     const ns = (process.env.HOSTING_NAMESERVERS || '').split(',').map(s => s.trim()).filter(Boolean);

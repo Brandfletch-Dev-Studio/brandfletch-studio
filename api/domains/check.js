@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
     }
 
     // Prefer Namecheap — gives real availability
-    const { checkAvailability, isConfigured } = require('../lib/namecheap');
+    const { checkAvailability, isConfigured } = require('../../lib/namecheap');
     if (isConfigured()) {
         try {
             const result = await checkAvailability(domain);

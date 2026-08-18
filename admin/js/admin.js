@@ -670,7 +670,7 @@ let adminCustomers = [];
 
 async function loadClients() {
     try {
-        const data = await api('/api/admin/customers');
+        const data = await api('/api/admin?action=customers');
         adminCustomers = data.customers || [];
 
         // Update overview stats
@@ -714,7 +714,7 @@ let clientProjects = [];
 
 async function loadClientProjects() {
     try {
-        const data = await api('/api/admin/projects');
+        const data = await api('/api/admin?action=projects');
         clientProjects = data.projects || [];
 
         // Populate customer dropdowns
@@ -799,7 +799,7 @@ async function editProject(id) {
 async function deleteProject(id) {
     if (!confirm('Delete this project? This cannot be undone.')) return;
     try {
-        await api('/api/admin/projects?id=' + id, 'DELETE');
+        await api('/api/admin?action=projects?id=' + id, 'DELETE');
         loadClientProjects();
     } catch (err) {
         alert('Failed to delete: ' + err.message);
@@ -830,7 +830,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (id) data.id = id;
 
             try {
-                await api('/api/admin/projects', id ? 'PUT' : 'POST', data);
+                await api('/api/admin?action=projects', id ? 'PUT' : 'POST', data);
                 closeProjectModal();
                 loadClientProjects();
             } catch (err) {
@@ -853,7 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                await api('/api/admin/invoices', 'POST', data);
+                await api('/api/admin?action=invoices', 'POST', data);
                 closeInvoiceModal();
                 loadInvoices();
             } catch (err) {
@@ -871,7 +871,7 @@ let adminInvoices = [];
 
 async function loadInvoices() {
     try {
-        const data = await api('/api/admin/invoices');
+        const data = await api('/api/admin?action=invoices');
         adminInvoices = data.invoices || [];
 
         // Update overview stats
@@ -930,7 +930,7 @@ function closeInvoiceModal() {
 
 async function markInvoicePaid(id) {
     try {
-        await api('/api/admin/invoices', 'PUT', { id, status: 'paid', paymentMethod: 'manual' });
+        await api('/api/admin?action=invoices', 'PUT', { id, status: 'paid', paymentMethod: 'manual' });
         loadInvoices();
     } catch (err) {
         alert('Failed to update: ' + err.message);
