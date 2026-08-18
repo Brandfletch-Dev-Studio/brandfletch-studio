@@ -51,7 +51,7 @@
   "hostingCpanel": [
     {
       "name": "Starter",
-      "tagline": "Full cPanel hosting for a single website — host any platform.",
+      "tagline": "Full cPanel hosting — host any platform on unlimited sites.",
       "priceMonthlyMWK": 18000,
       "priceYearlyMWK": 180000,
       "features": [

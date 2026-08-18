@@ -28,7 +28,7 @@ const defaultContent = {
         { title: 'Custom Web Apps & Systems', desc: 'Outgrown your current setup? We build the custom app, API, or platform your business needs next.', model: 'Project-based' }
     ],
     hostingCpanel: [
-        { name: 'Starter', tagline: 'Full cPanel hosting for a single website — host any platform.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['Unlimited websites', '20GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', '5 email accounts', 'Weekly automatic backups', 'Standard support'] },
+        { name: 'Starter', tagline: 'Full cPanel hosting — host any platform on unlimited sites.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['Unlimited websites', '20GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', '5 email accounts', 'Weekly automatic backups', 'Standard support'] },
         { name: 'Business', tagline: 'cPanel hosting for growing businesses with multiple sites.', priceMonthlyMWK: 36000, priceYearlyMWK: 360000, features: ['Unlimited websites', '50GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', 'Unlimited email accounts', 'Daily automatic backups', 'Free site migration', 'Priority support'], highlighted: true },
         { name: 'Agency', tagline: 'Full cPanel hosting with dedicated resources and room to scale.', priceMonthlyMWK: 72000, priceYearlyMWK: 720000, features: ['Unlimited websites', '100GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', 'Unlimited email accounts', 'Daily backups + malware scanning', 'Dedicated IP address available', 'Dedicated support'] }
     ],
