@@ -1,23 +1,22 @@
 // /api/orders/create — Create a hosting order and initiate Paychangu payment
 // POST /api/orders/create
 // Body: { plan, category, billing, domain, domainAction, firstName, lastName, email, password }
+// Stores orders in Supabase (replaces GitHub JSON approach)
 
 const crypto = require('crypto');
-// Domain check now uses Namecheap (loaded dynamically in getDomainPrice)
 
 const MWK_PER_USD = 6000;
 const DOMAIN_MARKUP = 1.15;
 
 const PLANS = {
-    'wordpress-starter':    { name: 'WordPress Starter',  priceMonthly: 30000,  priceYearly: 300000,  whmPlan: 'wp_starter' },
-    'wordpress-business':   { name: 'WordPress Business', priceMonthly: 60000,  priceYearly: 600000,  whmPlan: 'wp_business' },
-    'wordpress-agency':     { name: 'WordPress Agency',   priceMonthly: 120000, priceYearly: 1200000, whmPlan: 'wp_agency' },
-    'cpanel-starter':       { name: 'cPanel Starter',    priceMonthly: 18000,  priceYearly: 180000,  whmPlan: 'cp_starter' },
-    'cpanel-business':      { name: 'cPanel Business',   priceMonthly: 36000,  priceYearly: 360000,  whmPlan: 'cp_business' },
-    'cpanel-agency':        { name: 'cPanel Agency',     priceMonthly: 72000,  priceYearly: 720000,  whmPlan: 'cp_agency' }
+    'wordpress-starter':    { name: 'WordPress Starter',  priceMonthly: 30000,  priceYearly: 300000,  whmPlan: 'wp_starter',    type: 'wordpress' },
+    'wordpress-business':   { name: 'WordPress Business', priceMonthly: 60000,  priceYearly: 600000,  whmPlan: 'wp_business',   type: 'wordpress' },
+    'wordpress-agency':     { name: 'WordPress Agency',   priceMonthly: 120000, priceYearly: 1200000, whmPlan: 'wp_agency',     type: 'wordpress' },
+    'cpanel-starter':       { name: 'cPanel Starter',    priceMonthly: 18000,  priceYearly: 180000,  whmPlan: 'cp_starter',    type: 'cpanel' },
+    'cpanel-business':      { name: 'cPanel Business',   priceMonthly: 36000,  priceYearly: 360000,  whmPlan: 'cp_business',   type: 'cpanel' },
+    'cpanel-agency':        { name: 'cPanel Agency',     priceMonthly: 72000,  priceYearly: 720000,  whmPlan: 'cp_agency',     type: 'cpanel' }
 };
 
-// Domain pricing per year (at MWK 6000/$)
 const DOMAIN_PRICES = {
     '.com': 15000, '.net': 16000, '.org': 14000,
     '.co': 20000, '.io': 42000, '.biz': 12000,
@@ -41,17 +40,14 @@ function generatePassword() {
 
 function getDomainPriceFallback(domain) {
     const parts = domain.split('.');
-    // Try matching 2-level TLD first (e.g. .co.uk)
     if (parts.length >= 3) {
         const tld2 = '.' + parts.slice(-2).join('.');
         if (DOMAIN_PRICES[tld2]) return DOMAIN_PRICES[tld2];
     }
     const tld = '.' + parts[parts.length - 1];
-    return DOMAIN_PRICES[tld] || 18000; // default
+    return DOMAIN_PRICES[tld] || 18000;
 }
 
-// Authoritative domain price — re-checked server-side against Namecheap
-// so the charged amount can never be manipulated by the client.
 async function getDomainPrice(domain) {
     if (require('../lib/namecheap').isConfigured()) {
         try {
@@ -89,7 +85,6 @@ module.exports = async (req, res) => {
     try {
         const { plan, billing, domain, domainAction, firstName, lastName, email, password } = req.body;
 
-        // Validate plan
         if (!PLANS[plan]) {
             res.status(400).json({ error: 'Invalid plan selected' });
             return;
@@ -104,7 +99,6 @@ module.exports = async (req, res) => {
         const billingCycle = billing === 'yearly' ? 'yearly' : 'monthly';
         const amount = billingCycle === 'yearly' ? planDetails.priceYearly : planDetails.priceMonthly;
 
-        // Add domain registration fee if new domain — re-checked server-side
         let domainFee = 0;
         let domainPurchasePriceUsd = null;
         if (domainAction === 'register') {
@@ -118,73 +112,60 @@ module.exports = async (req, res) => {
         const cpanelPassword = password || generatePassword();
         const cpanelUser = domain.split('.')[0].toLowerCase().substring(0, 8) + crypto.randomBytes(1).toString('hex');
 
-        // Store order in GitHub (orders.json)
-        const order = {
-            txRef,
-            plan,
-            planName: planDetails.name,
-            billing: billingCycle,
-            amount: totalAmount,
-            hostingFee: amount,
-            domainFee,
-            domain,
-            domainAction: domainAction || 'existing',
-            domainPurchasePriceUsd,
-            email,
-            firstName: firstName || '',
-            lastName: lastName || '',
-            cpanelUser,
-            cpanelPassword,
-            whmPlan: planDetails.whmPlan,
-            status: 'pending',
-            createdAt: new Date().toISOString()
-        };
-
-        // Save order to GitHub
-        const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-        const REPO_OWNER = 'Brandfletch-Dev-Studio';
-        const REPO_NAME = 'brandfletch-studio';
-
-        try {
-            // Read current orders
-            const ordersUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/orders.json`;
-            let existingOrders = [];
-            let sha = null;
-
-            const readRes = await fetch(ordersUrl, {
-                headers: {
-                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
-                    'Accept': 'application/vnd.github+json',
-                    'User-Agent': 'Brandfletch-Orders'
+        // Find or create customer record
+        const supabase = require('../lib/supabase');
+        let customerId = null;
+        
+        if (supabase.isConfigured()) {
+            try {
+                // Look up existing customer by email
+                let customer = await supabase.select('customers', { email }, true);
+                if (!customer) {
+                    // Create new customer
+                    customer = await supabase.insert('customers', {
+                        full_name: (firstName + ' ' + lastName).trim(),
+                        email,
+                        status: 'active'
+                    });
                 }
-            });
-
-            if (readRes.ok) {
-                const fileData = await readRes.json();
-                sha = fileData.sha;
-                existingOrders = JSON.parse(Buffer.from(fileData.content, 'base64').toString('utf-8'));
+                customerId = customer.id;
+            } catch (custErr) {
+                console.error('Customer lookup/creation failed:', custErr.message);
             }
 
-            existingOrders.push(order);
-
-            // Write back
-            await fetch(ordersUrl, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
-                    'Accept': 'application/vnd.github+json',
-                    'User-Agent': 'Brandfletch-Orders',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: `New order: ${txRef} — ${planDetails.name} for ${domain}`,
-                    content: Buffer.from(JSON.stringify(existingOrders, null, 2)).toString('base64'),
-                    sha: sha || undefined
-                })
-            });
-        } catch (storeErr) {
-            console.error('Failed to store order:', storeErr.message);
-            // Continue anyway — we still have the tx_ref for verification
+            // Store order in Supabase
+            try {
+                await supabase.insert('orders', {
+                    tx_ref: txRef,
+                    customer_id: customerId,
+                    plan_name: planDetails.name,
+                    plan_type: planDetails.type,
+                    plan_tier: planDetails.whmPlan,
+                    billing_cycle: billingCycle,
+                    price_mwk: totalAmount,
+                    domain: domain,
+                    domain_action: domainAction || 'existing',
+                    domain_price_mwk: domainFee,
+                    payment_status: 'pending',
+                    provisioning_status: 'pending',
+                    cpanel_user: cpanelUser,
+                    cpanel_password: cpanelPassword,
+                    whm_plan: planDetails.whmPlan,
+                    order_data: {
+                        hostingFee: amount,
+                        domainPurchasePriceUsd,
+                        firstName: firstName || '',
+                        lastName: lastName || '',
+                        plan: plan,
+                        planName: planDetails.name
+                    }
+                });
+            } catch (orderErr) {
+                console.error('Supabase order insert failed:', orderErr.message);
+                // Continue — we still have the tx_ref for payment
+            }
+        } else {
+            console.warn('Supabase not configured — order not persisted');
         }
 
         // Initiate Paychangu payment
@@ -194,12 +175,12 @@ module.exports = async (req, res) => {
             return;
         }
 
-        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://brandfletch-studio.vercel.app';
+        const baseUrl = process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://brandfletch-studio.vercel.app';
 
         const paymentResponse = await fetch('https://api.paychangu.com/payment', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${PAYCHANGU_SECRET}`,
+                'Authorization': 'Bearer ' + PAYCHANGU_SECRET,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -209,14 +190,14 @@ module.exports = async (req, res) => {
                 email,
                 first_name: firstName || '',
                 last_name: lastName || '',
-                callback_url: `${baseUrl}/api/orders/verify`,
-                return_url: `${baseUrl}/order/status?tx_ref=${txRef}`,
+                callback_url: baseUrl + '/api/orders/verify',
+                return_url: baseUrl + '/order/status?tx_ref=' + txRef,
                 tx_ref: txRef,
                 customization: {
-                    title: `${planDetails.name} — ${billingCycle}`,
+                    title: planDetails.name + ' — ' + billingCycle,
                     description: domainAction === 'register'
-                        ? `Hosting (${billingCycle}) + Domain registration`
-                        : `Hosting (${billingCycle})`
+                        ? 'Hosting (' + billingCycle + ') + Domain registration'
+                        : 'Hosting (' + billingCycle + ')'
                 },
                 meta: {
                     order_id: txRef,

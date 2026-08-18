@@ -1,59 +1,88 @@
 // /api/orders/verify — Verify Paychangu payment and trigger auto-provisioning
 // GET /api/orders/verify?tx_ref=BF-xxxx  (redirect from Paychangu after payment)
 // POST /api/orders/verify (webhook from Paychangu)
+// Uses Supabase for order storage (replaces GitHub JSON approach)
 
 const { createCpanelAccount, registerDomain } = require('../provision/whm');
 
 async function findOrder(txRef) {
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const REPO_OWNER = 'Brandfletch-Dev-Studio';
-    const REPO_NAME = 'brandfletch-studio';
-
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/orders.json`;
-    const res = await fetch(url, {
-        headers: {
-            'Authorization': `Bearer ${GITHUB_TOKEN}`,
-            'Accept': 'application/vnd.github+json',
-            'User-Agent': 'Brandfletch-Orders'
-        }
-    });
-
-    if (!res.ok) return null;
-
-    const fileData = await res.json();
-    const orders = JSON.parse(Buffer.from(fileData.content, 'base64').toString('utf-8'));
-    const order = orders.find(o => o.txRef === txRef);
-
-    return { order, orders, sha: fileData.sha };
+    const supabase = require('../lib/supabase');
+    if (!supabase.isConfigured()) return { order: null };
+    
+    const order = await supabase.select('orders', { tx_ref: txRef }, true);
+    if (!order) return { order: null };
+    
+    // Normalize to the shape expected by the provisioning code
+    return {
+        order: {
+            txRef: order.tx_ref,
+            plan: order.order_data?.plan,
+            planName: order.plan_name,
+            billing: order.billing_cycle,
+            amount: order.price_mwk,
+            hostingFee: order.order_data?.hostingFee,
+            domainFee: order.domain_price_mwk,
+            domain: order.domain,
+            domainAction: order.domain_action,
+            domainPurchasePriceUsd: order.order_data?.domainPurchasePriceUsd,
+            email: order.order_data?.email || '',
+            firstName: order.order_data?.firstName || '',
+            lastName: order.order_data?.lastName || '',
+            cpanelUser: order.cpanel_user,
+            cpanelPassword: order.cpanel_password,
+            whmPlan: order.whm_plan,
+            status: order.payment_status === 'paid' ? 'paid' : 'pending',
+            customerId: order.customer_id,
+            orderId: order.id
+        },
+        dbOrder: order
+    };
 }
 
 async function updateOrderStatus(txRef, updates) {
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const REPO_OWNER = 'Brandfletch-Dev-Studio';
-    const REPO_NAME = 'brandfletch-studio';
-
-    const { orders, sha } = await findOrder(txRef);
-    if (!orders) return;
-
-    const orderIndex = orders.findIndex(o => o.txRef === txRef);
-    if (orderIndex === -1) return;
-
-    orders[orderIndex] = { ...orders[orderIndex], ...updates, updatedAt: new Date().toISOString() };
-
-    await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/orders.json`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${GITHUB_TOKEN}`,
-            'Accept': 'application/vnd.github+json',
-            'User-Agent': 'Brandfletch-Orders',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            message: `Order ${txRef} updated — ${updates.status || 'processed'}`,
-            content: Buffer.from(JSON.stringify(orders, null, 2)).toString('base64'),
-            sha
-        })
-    });
+    const supabase = require('../lib/supabase');
+    if (!supabase.isConfigured()) return;
+    
+    // Map the legacy update keys to Supabase columns
+    const dbUpdates = {};
+    
+    if (updates.status === 'paid' || updates.paymentVerified) {
+        dbUpdates.payment_status = 'paid';
+        if (updates.paidAt) dbUpdates.paid_at = updates.paidAt;
+        if (updates.paymentAmount) dbUpdates.payment_amount = String(updates.paymentAmount);
+        if (updates.paymentCurrency) dbUpdates.payment_currency = updates.paymentCurrency;
+        if (updates.paymentChannel) dbUpdates.payment_method = updates.paymentChannel;
+        if (updates.paymentReference) dbUpdates.payment_reference = updates.paymentReference;
+    }
+    
+    if (updates.status === 'provisioned') {
+        dbUpdates.provisioning_status = 'provisioned';
+        if (updates.provisionedAt) dbUpdates.provisioned_at = updates.provisionedAt;
+    }
+    
+    if (updates.status === 'provisioning_failed') {
+        dbUpdates.provisioning_status = 'failed';
+        if (updates.provisioningError) dbUpdates.provisioning_error = updates.provisioningError;
+    }
+    
+    if (updates.domainRegistrationStatus === 'registered') {
+        dbUpdates.domain_registration_status = 'registered';
+    }
+    
+    if (updates.domainRegistrationStatus === 'failed' || updates.domainResult?.success === false) {
+        dbUpdates.domain_registration_status = 'failed';
+        dbUpdates.domain_registration_result = updates.domainResult;
+    }
+    
+    if (updates.provisioningResult) {
+        dbUpdates.provisioning_result = updates.provisioningResult;
+    }
+    
+    try {
+        await supabase.update('orders', { tx_ref: txRef }, dbUpdates);
+    } catch (err) {
+        console.error('Order update failed:', err.message);
+    }
 }
 
 module.exports = async (req, res) => {
@@ -77,10 +106,10 @@ module.exports = async (req, res) => {
             return;
         }
 
-        const verifyResponse = await fetch(`https://api.paychangu.com/verify-payment/${txRef}`, {
+        const verifyResponse = await fetch('https://api.paychangu.com/verify-payment/' + txRef, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${PAYCHANGU_SECRET}`,
+                'Authorization': 'Bearer ' + PAYCHANGU_SECRET,
                 'Accept': 'application/json'
             }
         });
@@ -88,27 +117,25 @@ module.exports = async (req, res) => {
         const verifyData = await verifyResponse.json();
 
         if (verifyData.status !== 'success' || verifyData.data?.status !== 'success') {
-            // Payment not successful — redirect to status page with failed info
             if (req.method === 'GET') {
-                res.redirect(302, `/order/status?tx_ref=${txRef}&status=failed`);
+                res.redirect(302, '/order/status?tx_ref=' + txRef + '&status=failed');
             } else {
                 res.status(400).json({ success: false, status: 'payment_failed', data: verifyData });
             }
             return;
         }
 
-        // Payment verified — find order and provision
-        const { order } = await findOrder(txRef);
+        // Payment verified — find order
+        const { order, dbOrder } = await findOrder(txRef);
 
         if (!order) {
             res.status(404).json({ error: 'Order not found', txRef });
             return;
         }
 
-        if (order.status === 'provisioned') {
-            // Already provisioned — redirect to success
+        if (dbOrder && dbOrder.provisioning_status === 'provisioned') {
             if (req.method === 'GET') {
-                res.redirect(302, `/order/status?tx_ref=${txRef}&status=success&provisioned=true`);
+                res.redirect(302, '/order/status?tx_ref=' + txRef + '&status=success&provisioned=true');
             } else {
                 res.status(200).json({ success: true, message: 'Already provisioned', order });
             }
@@ -117,7 +144,6 @@ module.exports = async (req, res) => {
 
         // Update order to paid
         await updateOrderStatus(txRef, {
-            status: 'paid',
             paymentVerified: true,
             paymentAmount: verifyData.data.amount,
             paymentCurrency: verifyData.data.currency,
@@ -133,10 +159,17 @@ module.exports = async (req, res) => {
 
         try {
             provisioningResult = await createCpanelAccount(order);
-            await updateOrderStatus(txRef, { status: 'provisioned', provisionedAt: new Date().toISOString() });
+            await updateOrderStatus(txRef, {
+                status: 'provisioned',
+                provisionedAt: new Date().toISOString(),
+                provisioningResult
+            });
         } catch (provErr) {
             provisioningError = provErr.message;
-            await updateOrderStatus(txRef, { status: 'provisioning_failed', provisioningError });
+            await updateOrderStatus(txRef, {
+                status: 'provisioning_failed',
+                provisioningError
+            });
             console.error('Provisioning error:', provErr.message);
         }
 
@@ -144,16 +177,63 @@ module.exports = async (req, res) => {
         if (order.domainAction === 'register') {
             try {
                 domainResult = await registerDomain(order);
+                await updateOrderStatus(txRef, {
+                    domainRegistrationStatus: domainResult.success ? 'registered' : 'failed',
+                    domainResult
+                });
             } catch (domErr) {
                 domainResult = { success: false, error: domErr.message };
+                await updateOrderStatus(txRef, {
+                    domainRegistrationStatus: 'failed',
+                    domainResult
+                });
                 console.error('Domain registration error:', domErr.message);
             }
         }
 
-        // Redirect or respond
+        // Create hosting account record in Supabase if provisioned
+        if (provisioningResult && provisioningResult.success) {
+            const supabase = require('../lib/supabase');
+            if (supabase.isConfigured()) {
+                try {
+                    await supabase.insert('hosting_accounts', {
+                        order_id: dbOrder?.id,
+                        customer_id: order.customerId,
+                        cpanel_user: order.cpanelUser,
+                        domain: order.domain,
+                        plan_name: order.planName,
+                        plan_type: order.plan,
+                        status: 'active'
+                    });
+                } catch (haErr) {
+                    console.error('Hosting account record failed:', haErr.message);
+                }
+            }
+        }
+
+        // Create domain record in Supabase if registered
+        if (domainResult && domainResult.success) {
+            const supabase = require('../lib/supabase');
+            if (supabase.isConfigured()) {
+                try {
+                    const ns = (process.env.HOSTING_NAMESERVERS || '').split(',').map(s => s.trim()).filter(Boolean);
+                    await supabase.insert('domains', {
+                        order_id: dbOrder?.id,
+                        customer_id: order.customerId,
+                        domain: order.domain,
+                        registration_status: 'registered',
+                        nameservers: ns,
+                        registered_at: new Date().toISOString()
+                    });
+                } catch (domErr) {
+                    console.error('Domain record failed:', domErr.message);
+                }
+            }
+        }
+
         if (req.method === 'GET') {
             const status = provisioningError ? 'provisioning_failed' : 'success';
-            res.redirect(302, `/order/status?tx_ref=${txRef}&status=${status}`);
+            res.redirect(302, '/order/status?tx_ref=' + txRef + '&status=' + status);
         } else {
             res.status(200).json({
                 success: true,
@@ -168,7 +248,7 @@ module.exports = async (req, res) => {
     } catch (err) {
         console.error('Verify error:', err);
         if (req.method === 'GET') {
-            res.redirect(302, `/order/status?tx_ref=${txRef}&status=error`);
+            res.redirect(302, '/order/status?tx_ref=' + txRef + '&status=error');
         } else {
             res.status(500).json({ error: 'Internal server error', message: err.message });
         }
