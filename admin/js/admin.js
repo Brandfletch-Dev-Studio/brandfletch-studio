@@ -661,3 +661,303 @@ function formatDate(iso) {
     if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
     return d.toLocaleDateString();
 }
+
+// ===================================
+// CLIENT MANAGEMENT
+// ===================================
+
+let adminCustomers = [];
+
+async function loadClients() {
+    try {
+        const data = await api('/api/admin/customers');
+        adminCustomers = data.customers || [];
+
+        // Update overview stats
+        const clientsCount = adminCustomers.length;
+        const totalAnnual = adminCustomers.reduce((sum, c) => sum + (c.total_annual_fees || 0), 0);
+        document.getElementById('statClients').textContent = clientsCount;
+        document.getElementById('statAnnualFees').textContent = totalAnnual > 0 ? (totalAnnual / 1000).toFixed(0) + 'K' : '0';
+
+        const list = document.getElementById('clientsList');
+        if (!adminCustomers.length) {
+            list.innerHTML = '<p class="muted">No clients yet. Customers appear here after placing an order or registering on the portal.</p>';
+            return;
+        }
+
+        let html = '<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Projects</th><th>Hosting</th><th>Annual Fees</th><th>Status</th></tr></thead><tbody>';
+        for (const c of adminCustomers) {
+            const annualFee = (c.total_annual_fees || 0).toLocaleString();
+            const statusClass = c.status === 'active' ? 'badge-success' : c.status === 'suspended' ? 'badge-warning' : 'badge-danger';
+            html += `<tr>
+                <td>${c.full_name || 'Unknown'}</td>
+                <td>${c.email || ''}</td>
+                <td>${c.phone || 'N/A'}</td>
+                <td>${c.project_count || 0}</td>
+                <td>${c.hosting_count || 0}</td>
+                <td>MK ${annualFee}</td>
+                <td><span class="badge ${statusClass}">${c.status || 'active'}</span></td>
+            </tr>`;
+        }
+        html += '</tbody></table>';
+        list.innerHTML = html;
+    } catch (err) {
+        document.getElementById('clientsList').innerHTML = '<p class="muted">Unable to load clients: ' + err.message + '</p>';
+    }
+}
+
+// ===================================
+// CLIENT SITES / PROJECTS
+// ===================================
+
+let clientProjects = [];
+
+async function loadClientProjects() {
+    try {
+        const data = await api('/api/admin/projects');
+        clientProjects = data.projects || [];
+
+        // Populate customer dropdowns
+        const customerSelects = ['projectCustomer', 'invoiceCustomer'];
+        for (const selId of customerSelects) {
+            const sel = document.getElementById(selId);
+            if (!sel) continue;
+            const currentVal = sel.value;
+            sel.innerHTML = '<option value="">Select a client...</option>';
+            for (const c of adminCustomers) {
+                sel.innerHTML += `<option value="${c.id}">${c.full_name} (${c.email})</option>`;
+            }
+            sel.value = currentVal;
+        }
+
+        const list = document.getElementById('clientProjectsList');
+        if (!clientProjects.length) {
+            list.innerHTML = '<p class="muted">No client websites assigned yet. Click "Assign Website" to add one.</p>';
+            return;
+        }
+
+        let html = '<table class="data-table"><thead><tr><th>Project</th><th>Client</th><th>Domain</th><th>Type</th><th>Status</th><th>Annual Fee</th><th>Billing</th><th>Actions</th></tr></thead><tbody>';
+        for (const p of clientProjects) {
+            const statusClass = p.status === 'deployed' ? 'badge-success' :
+                p.status === 'in_development' ? 'badge-warning' :
+                p.status === 'maintenance' ? 'badge-success' :
+                p.status === 'paused' ? 'badge-neutral' : 'badge-neutral';
+            const billingClass = p.billing_active ? 'badge-success' : 'badge-neutral';
+            const fee = p.management_fee_mwk ? 'MK ' + p.management_fee_mwk.toLocaleString() : 'N/A';
+            html += `<tr>
+                <td>${p.project_name}</td>
+                <td>${p.customer_name || 'Unassigned'}</td>
+                <td>${p.domain || 'N/A'}</td>
+                <td>${(p.project_type || '').replace('_', ' ')}</td>
+                <td><span class="badge ${statusClass}">${(p.status || '').replace('_', ' ')}</span></td>
+                <td>${fee}</td>
+                <td><span class="badge ${billingClass}">${p.billing_active ? 'active' : 'inactive'}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-ghost" onclick="editProject('${p.id}')">Edit</button>
+                    <button class="btn btn-sm btn-ghost" onclick="deleteProject('${p.id}')" style="color: var(--danger);">Delete</button>
+                </td>
+            </tr>`;
+        }
+        html += '</tbody></table>';
+        list.innerHTML = html;
+    } catch (err) {
+        document.getElementById('clientProjectsList').innerHTML = '<p class="muted">Unable to load projects: ' + err.message + '</p>';
+    }
+}
+
+function openProjectEditor() {
+    document.getElementById('projectModal').classList.remove('hidden');
+    document.getElementById('projectModalTitle').textContent = 'Assign Website to Client';
+    document.getElementById('projectId').value = '';
+    document.getElementById('projectForm').reset();
+    document.getElementById('projectFee').value = '500000';
+}
+
+function closeProjectModal() {
+    document.getElementById('projectModal').classList.add('hidden');
+}
+
+async function editProject(id) {
+    const p = clientProjects.find(x => x.id === id);
+    if (!p) return;
+
+    document.getElementById('projectModal').classList.remove('hidden');
+    document.getElementById('projectModalTitle').textContent = 'Edit: ' + p.project_name;
+    document.getElementById('projectId').value = p.id;
+    document.getElementById('projectCustomer').value = p.customer_id || '';
+    document.getElementById('projectName').value = p.project_name || '';
+    document.getElementById('projectDomain').value = p.domain || '';
+    document.getElementById('projectType').value = p.project_type || 'custom_website';
+    document.getElementById('projectStatus').value = p.status || 'planning';
+    document.getElementById('projectFee').value = p.management_fee_mwk || 500000;
+    document.getElementById('projectBillingCycle').value = p.billing_cycle || 'annual';
+    document.getElementById('projectDescription').value = p.description || '';
+    document.getElementById('projectBillingActive').checked = p.billing_active !== false;
+    document.getElementById('projectNotes').value = p.notes || '';
+}
+
+async function deleteProject(id) {
+    if (!confirm('Delete this project? This cannot be undone.')) return;
+    try {
+        await api('/api/admin/projects?id=' + id, 'DELETE');
+        loadClientProjects();
+    } catch (err) {
+        alert('Failed to delete: ' + err.message);
+    }
+}
+
+// Project form submit
+document.addEventListener('DOMContentLoaded', () => {
+    const projectForm = document.getElementById('projectForm');
+    if (projectForm) {
+        projectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('projectId').value;
+            const techStr = '';
+            const data = {
+                customerId: document.getElementById('projectCustomer').value || null,
+                projectName: document.getElementById('projectName').value,
+                domain: document.getElementById('projectDomain').value,
+                projectType: document.getElementById('projectType').value,
+                status: document.getElementById('projectStatus').value,
+                managementFeeMwk: parseInt(document.getElementById('projectFee').value) || 500000,
+                billingCycle: document.getElementById('projectBillingCycle').value,
+                description: document.getElementById('projectDescription').value,
+                billingActive: document.getElementById('projectBillingActive').checked,
+                notes: document.getElementById('projectNotes').value,
+                technologies: []
+            };
+            if (id) data.id = id;
+
+            try {
+                await api('/api/admin/projects', id ? 'PUT' : 'POST', data);
+                closeProjectModal();
+                loadClientProjects();
+            } catch (err) {
+                alert('Failed to save: ' + err.message);
+            }
+        });
+    }
+
+    const invoiceForm = document.getElementById('invoiceForm');
+    if (invoiceForm) {
+        invoiceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                customerId: document.getElementById('invoiceCustomer').value || null,
+                description: document.getElementById('invoiceDescription').value,
+                amountMwk: parseInt(document.getElementById('invoiceAmount').value) || 0,
+                billingPeriod: document.getElementById('invoiceBillingPeriod').value,
+                dueDate: document.getElementById('invoiceDueDate').value || null,
+                notes: document.getElementById('invoiceNotes').value
+            };
+
+            try {
+                await api('/api/admin/invoices', 'POST', data);
+                closeInvoiceModal();
+                loadInvoices();
+            } catch (err) {
+                alert('Failed to create invoice: ' + err.message);
+            }
+        });
+    }
+});
+
+// ===================================
+// INVOICES
+// ===================================
+
+let adminInvoices = [];
+
+async function loadInvoices() {
+    try {
+        const data = await api('/api/admin/invoices');
+        adminInvoices = data.invoices || [];
+
+        // Update overview stats
+        const pending = adminInvoices.filter(i => i.status === 'pending' || i.status === 'overdue').length;
+        document.getElementById('statPendingInvoices').textContent = pending;
+
+        const list = document.getElementById('invoicesList');
+        if (!adminInvoices.length) {
+            list.innerHTML = '<p class="muted">No invoices yet. Invoices are auto-generated when you assign a website with billing active, or you can create one manually.</p>';
+            return;
+        }
+
+        let html = '<table class="data-table"><thead><tr><th>Invoice #</th><th>Client</th><th>Description</th><th>Amount</th><th>Period</th><th>Status</th><th>Due Date</th><th>Actions</th></tr></thead><tbody>';
+        for (const inv of adminInvoices) {
+            const statusClass = inv.status === 'paid' ? 'badge-success' :
+                inv.status === 'overdue' ? 'badge-danger' :
+                inv.status === 'pending' ? 'badge-warning' : 'badge-neutral';
+            const amount = 'MK ' + inv.amount_mwk.toLocaleString();
+            const due = inv.due_date ? new Date(inv.due_date).toLocaleDateString() : 'N/A';
+            html += `<tr>
+                <td style="font-family: var(--font-mono); font-size: 0.8rem;">${inv.invoice_number}</td>
+                <td>${inv.customer_name || 'N/A'}</td>
+                <td>${inv.description}</td>
+                <td>${amount}</td>
+                <td>${inv.billing_period || ''}</td>
+                <td><span class="badge ${statusClass}">${inv.status}</span></td>
+                <td>${due}</td>
+                <td>
+                    ${inv.status === 'pending' || inv.status === 'overdue'
+                        ? `<button class="btn btn-sm btn-ghost" onclick="markInvoicePaid('${inv.id}')" style="color: var(--success);">Mark Paid</button>`
+                        : ''}
+                </td>
+            </tr>`;
+        }
+        html += '</tbody></table>';
+        list.innerHTML = html;
+    } catch (err) {
+        document.getElementById('invoicesList').innerHTML = '<p class="muted">Unable to load invoices: ' + err.message + '</p>';
+    }
+}
+
+function openInvoiceEditor() {
+    document.getElementById('invoiceModal').classList.remove('hidden');
+    document.getElementById('invoiceForm').reset();
+    document.getElementById('invoiceAmount').value = '500000';
+
+    // Default due date to 30 days from now
+    const due = new Date();
+    due.setDate(due.getDate() + 30);
+    document.getElementById('invoiceDueDate').value = due.toISOString().split('T')[0];
+}
+
+function closeInvoiceModal() {
+    document.getElementById('invoiceModal').classList.add('hidden');
+}
+
+async function markInvoicePaid(id) {
+    try {
+        await api('/api/admin/invoices', 'PUT', { id, status: 'paid', paymentMethod: 'manual' });
+        loadInvoices();
+    } catch (err) {
+        alert('Failed to update: ' + err.message);
+    }
+}
+
+// ===================================
+// VIEW SWITCHING — hook into existing nav
+// ===================================
+
+const originalSwitchView = window.switchView || function() {};
+document.addEventListener('DOMContentLoaded', () => {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const view = item.dataset.view;
+            if (view === 'clients') loadClients();
+            if (view === 'clientsites') loadClientProjects();
+            if (view === 'invoices') loadInvoices();
+        });
+    });
+
+    // Also load on initial dashboard show
+    setTimeout(() => {
+        if (document.getElementById('dashboard') && !document.getElementById('dashboard').classList.contains('hidden')) {
+            loadClients();
+            loadInvoices();
+        }
+    }, 500);
+});

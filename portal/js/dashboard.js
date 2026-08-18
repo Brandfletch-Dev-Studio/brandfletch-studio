@@ -23,8 +23,10 @@ async function initDashboard() {
     // Fetch data
     await Promise.all([
         loadHostingAccounts(client),
+        loadWebsites(client),
         loadDomains(client),
-        loadOrders(client)
+        loadOrders(client),
+        loadCustomerInvoices(client)
     ]);
 }
 
@@ -184,3 +186,101 @@ async function loadOrders(client) {
 
 // Initialize
 initDashboard();
+
+// ===================================
+// CUSTOM WEBSITES (Projects)
+// ===================================
+
+async function loadWebsites(client) {
+    const container = document.getElementById('websitesList');
+    const statEl = document.getElementById('statWebsites');
+
+    try {
+        const { data, error } = await client
+            .from('projects')
+            .select('project_name, domain, description, status, project_type, management_fee_mwk, billing_cycle, billing_active, next_billing_date, deployed_at, technologies, notes')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        statEl.textContent = data ? data.length : 0;
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>No custom websites assigned to your account yet.</p><a href="/#services" class="btn btn-ghost btn-sm">Request a Quote</a></div>';
+            return;
+        }
+
+        let html = '<table class="data-table"><thead><tr><th>Project</th><th>Domain</th><th>Type</th><th>Status</th><th>Annual Fee</th><th>Billing</th></tr></thead><tbody>';
+        for (const p of data) {
+            const statusClass = p.status === 'deployed' || p.status === 'maintenance' ? 'badge-success' :
+                p.status === 'in_development' ? 'badge-warning' :
+                p.status === 'paused' ? 'badge-neutral' : 'badge-neutral';
+            const billingClass = p.billing_active ? 'badge-success' : 'badge-neutral';
+            const fee = p.management_fee_mwk > 0 ? 'MK ' + p.management_fee_mwk.toLocaleString() + '/' + (p.billing_cycle || 'year') : 'N/A';
+            html += `<tr>
+                <td>${p.project_name}</td>
+                <td>${p.domain || 'N/A'}</td>
+                <td>${(p.project_type || '').replace('_', ' ')}</td>
+                <td><span class="badge ${statusClass}">${(p.status || '').replace('_', ' ')}</span></td>
+                <td>${fee}</td>
+                <td><span class="badge ${billingClass}">${p.billing_active ? 'active' : 'inactive'}</span></td>
+            </tr>`;
+        }
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    } catch (err) {
+        console.error('Websites error:', err);
+        container.innerHTML = '<div class="empty-state"><p>Unable to load your websites.</p></div>';
+        statEl.textContent = '0';
+    }
+}
+
+// ===================================
+// INVOICES (Customer-facing)
+// ===================================
+
+async function loadCustomerInvoices(client) {
+    const container = document.getElementById('invoicesList');
+    const statEl = document.getElementById('statInvoices');
+
+    try {
+        const { data, error } = await client
+            .from('invoices')
+            .select('invoice_number, description, amount_mwk, billing_period, status, due_date, paid_at, created_at')
+            .order('created_at', { ascending: false })
+            .limit(20);
+
+        if (error) throw error;
+
+        const pending = data ? data.filter(i => i.status === 'pending' || i.status === 'overdue').length : 0;
+        statEl.textContent = pending;
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>No invoices yet.</p></div>';
+            return;
+        }
+
+        let html = '<table class="data-table"><thead><tr><th>Invoice #</th><th>Description</th><th>Amount</th><th>Period</th><th>Status</th><th>Due Date</th></tr></thead><tbody>';
+        for (const inv of data) {
+            const statusClass = inv.status === 'paid' ? 'badge-success' :
+                inv.status === 'overdue' ? 'badge-danger' :
+                inv.status === 'pending' ? 'badge-warning' : 'badge-neutral';
+            const amount = 'MK ' + inv.amount_mwk.toLocaleString();
+            const due = inv.due_date ? new Date(inv.due_date).toLocaleDateString() : 'N/A';
+            html += `<tr>
+                <td style="font-family: var(--font-mono); font-size: 0.8rem;">${inv.invoice_number}</td>
+                <td>${inv.description}</td>
+                <td>${amount}</td>
+                <td>${inv.billing_period || ''}</td>
+                <td><span class="badge ${statusClass}">${inv.status}</span></td>
+                <td>${due}</td>
+            </tr>`;
+        }
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    } catch (err) {
+        console.error('Invoices error:', err);
+        container.innerHTML = '<div class="empty-state"><p>Unable to load invoices.</p></div>';
+        statEl.textContent = '0';
+    }
+}
