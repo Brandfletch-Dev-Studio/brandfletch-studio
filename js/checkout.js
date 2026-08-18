@@ -174,6 +174,12 @@
         if (!selectedPlan) return;
         const hostingPrice = selectedBilling === 'yearly' ? PLANS[selectedPlan].priceYearly : PLANS[selectedPlan].priceMonthly;
         document.getElementById('planPriceAmount').textContent = formatMWK(hostingPrice);
+        // Update the period label
+        const periodEl = document.querySelector('#step1 .pricing-period');
+        if (periodEl) periodEl.textContent = '/' + (selectedBilling === 'yearly' ? 'year' : 'month');
+        // Update the hosting summary label
+        const summaryLabel = document.querySelector('#step1 div[style*="justify-content:space-between"] span');
+        if (summaryLabel) summaryLabel.textContent = 'Hosting (' + selectedBilling + ')';
         document.getElementById('summaryHosting').textContent = formatMWK(hostingPrice);
 
         let total = hostingPrice;
