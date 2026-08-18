@@ -164,12 +164,25 @@ function renderHosting() {
             <ul class="pricing-features">
                 ${(p.features || []).map(f => `<li>${f}</li>`).join('')}
             </ul>
-            <a href="#order" class="btn btn-ghost pricing-cta" data-plan="${p.name}" data-category="${wpGrid ? 'wordpress' : 'cpanel'}">Order Now</a>
+            <button class="btn btn-ghost pricing-cta" data-plan-key="${wpGrid ? 'wordpress' : 'cpanel'}-${p.name.toLowerCase()}" data-plan-name="${p.name}" data-category="${wpGrid ? 'wordpress' : 'cpanel'}">Order Now</button>
         </div>
     `;
 
     if (wpGrid) wpGrid.innerHTML = wpPackages.map(cardHTML).join('');
     if (cpGrid) cpGrid.innerHTML = cpPackages.map(cardHTML).join('');
+
+    // Wire up Order Now buttons to checkout
+    document.querySelectorAll('.pricing-cta[data-plan-key]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (window.BrandfletchCheckout) {
+                window.BrandfletchCheckout.openCheckout(
+                    this.getAttribute('data-plan-key'),
+                    this.getAttribute('data-plan-name'),
+                    this.getAttribute('data-category')
+                );
+            }
+        });
+    });
 
     document.getElementById('hostingNote').textContent = siteContent.hostingNote || defaultContent.hostingNote || '';
 }
