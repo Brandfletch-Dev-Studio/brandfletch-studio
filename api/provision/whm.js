@@ -49,29 +49,63 @@ async function createCpanelAccount(order) {
     }
 }
 
-// Register a domain via ResellerClub API
-// ResellerClub API is free for resellers
-// https://http.kb.corelogic.com/kb/resellerclub/api
-async function registerDomain(order) {
-    const RESELLER_ID = process.env.RESELLERCLUB_ID;
-    const RESELLER_KEY = process.env.RESELLERCLUB_API_KEY;
+// Register a domain via name.com API and point it at our hosting nameservers.
+// Domain is registered under the Brandfletch Dev Studio account as registrant.
+const { createDomain, setNameservers } = require('../lib/namecom');
 
-    if (!RESELLER_ID || !RESELLER_KEY) {
-        throw new Error('Domain registrar not configured');
+// Nameservers your reseller hosting plan uses for cPanel/WordPress hosting.
+// Update these to match unlimitedwebhosting.co.uk's assigned nameservers.
+const HOSTING_NAMESERVERS = (process.env.HOSTING_NAMESERVERS || '')
+    .split(',')
+    .map(ns => ns.trim())
+    .filter(Boolean);
+
+async function registerDomain(order) {
+    if (!process.env.NAMECOM_USERNAME || !process.env.NAMECOM_API_TOKEN) {
+        return {
+            success: false,
+            pending: true,
+            domain: order.domain,
+            message: 'Domain registrar not configured. Account created but domain needs manual registration.'
+        };
     }
 
-    // ResellerClub API — register domain
-    // This is a simplified version. The full flow requires:
-    // 1. Check availability
-    // 2. Add funds to reseller account
-    // 3. Register domain with customer details
-    // For now, we return a pending status and handle manually
-    return {
-        success: false,
-        pending: true,
-        domain: order.domain,
-        message: 'Domain registration requires manual completion. Account created but domain DNS needs manual configuration.'
-    };
+    try {
+        const purchaseOptions = { years: 1 };
+        if (order.domainPurchasePriceUsd) {
+            purchaseOptions.purchasePrice = order.domainPurchasePriceUsd;
+        }
+
+        const result = await createDomain(order.domain, purchaseOptions);
+
+        // Point the new domain at our hosting nameservers so the site resolves
+        if (HOSTING_NAMESERVERS.length >= 2) {
+            try {
+                await setNameservers(order.domain, HOSTING_NAMESERVERS);
+                result.nameserversSet = true;
+            } catch (nsErr) {
+                console.error('setNameservers failed:', nsErr.message);
+                result.nameserversSet = false;
+                result.nameserverError = nsErr.message;
+            }
+        }
+
+        return {
+            success: true,
+            domain: order.domain,
+            order: result.order,
+            totalPaid: result.totalPaid,
+            nameserversSet: result.nameserversSet || false,
+            message: 'Domain registered successfully'
+        };
+    } catch (err) {
+        return {
+            success: false,
+            pending: true,
+            domain: order.domain,
+            message: `Domain registration failed: ${err.message}. Account created but domain needs manual registration.`
+        };
+    }
 }
 
 module.exports = { createCpanelAccount, registerDomain };

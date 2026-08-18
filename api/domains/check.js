@@ -1,6 +1,12 @@
-// /api/domains/check — Check domain availability via RDAP
-// No authentication needed — uses the free RDAP protocol.
+// /api/domains/check — Check domain availability
+// Uses name.com API when configured (real availability + real registry price).
+// Falls back to free RDAP lookup if name.com credentials are not set.
 // GET /api/domains/check?domain=example.com
+
+const { checkAvailability } = require('../lib/namecom');
+
+const MWK_PER_USD = 6000;
+const MARKUP = 1.15; // 15% markup over registry cost
 
 module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') {
@@ -27,6 +33,41 @@ module.exports = async (req, res) => {
         return;
     }
 
+    // Prefer name.com — gives real availability and real registry pricing
+    if (process.env.NAMECOM_USERNAME && process.env.NAMECOM_API_TOKEN) {
+        try {
+            const result = await checkAvailability(domain);
+
+            if (!result.purchasable) {
+                res.status(200).json({
+                    domain,
+                    available: false,
+                    message: result.premium ? 'Domain is a premium listing' : 'Domain is already registered',
+                    premium: result.premium
+                });
+                return;
+            }
+
+            const priceUsd = result.purchasePrice || 0;
+            const priceMwk = Math.round(priceUsd * MWK_PER_USD * MARKUP);
+
+            res.status(200).json({
+                domain,
+                available: true,
+                message: 'Domain is available for registration',
+                premium: result.premium,
+                priceMwk,
+                priceUsd,
+                source: 'namecom'
+            });
+            return;
+        } catch (err) {
+            console.error('name.com availability check failed, falling back to RDAP:', err.message);
+            // fall through to RDAP fallback below
+        }
+    }
+
+    // Fallback — free RDAP lookup (availability only, no live pricing)
     try {
         const rdapUrl = `https://rdap.org/domain/${domain}`;
         const response = await fetch(rdapUrl, {
@@ -39,7 +80,8 @@ module.exports = async (req, res) => {
             res.status(200).json({
                 domain,
                 available: true,
-                message: 'Domain is available for registration'
+                message: 'Domain is available for registration',
+                source: 'rdap'
             });
         } else if (response.ok) {
             const data = await response.json();
@@ -52,13 +94,15 @@ module.exports = async (req, res) => {
                 message: 'Domain is already registered',
                 registered: true,
                 registrar: registrar?.eventActor || null,
-                expiresAt: expiry?.eventDate || null
+                expiresAt: expiry?.eventDate || null,
+                source: 'rdap'
             });
         } else {
             res.status(200).json({
                 domain,
                 available: true,
-                message: 'Domain appears to be available'
+                message: 'Domain appears to be available',
+                source: 'rdap'
             });
         }
     } catch (err) {

@@ -3,6 +3,10 @@
 // Body: { plan, category, billing, domain, domainAction, firstName, lastName, email, password }
 
 const crypto = require('crypto');
+const { checkAvailability } = require('../lib/namecom');
+
+const MWK_PER_USD = 6000;
+const DOMAIN_MARKUP = 1.15;
 
 const PLANS = {
     'wordpress-starter':    { name: 'WordPress Starter',  priceMonthly: 30000,  priceYearly: 300000,  whmPlan: 'wp_starter' },
@@ -35,7 +39,7 @@ function generatePassword() {
     return pwd;
 }
 
-function getDomainPrice(domain) {
+function getDomainPriceFallback(domain) {
     const parts = domain.split('.');
     // Try matching 2-level TLD first (e.g. .co.uk)
     if (parts.length >= 3) {
@@ -44,6 +48,26 @@ function getDomainPrice(domain) {
     }
     const tld = '.' + parts[parts.length - 1];
     return DOMAIN_PRICES[tld] || 18000; // default
+}
+
+// Authoritative domain price — always re-checked server-side against name.com
+// so the charged amount can never be manipulated by the client.
+async function getDomainPrice(domain) {
+    if (process.env.NAMECOM_USERNAME && process.env.NAMECOM_API_TOKEN) {
+        try {
+            const result = await checkAvailability(domain);
+            if (result.purchasable && result.purchasePrice) {
+                return {
+                    price: Math.round(result.purchasePrice * MWK_PER_USD * DOMAIN_MARKUP),
+                    purchasePriceUsd: result.purchasePrice,
+                    premium: result.premium
+                };
+            }
+        } catch (err) {
+            console.error('name.com price check failed, using fallback pricing:', err.message);
+        }
+    }
+    return { price: getDomainPriceFallback(domain), purchasePriceUsd: null, premium: false };
 }
 
 module.exports = async (req, res) => {
@@ -75,10 +99,13 @@ module.exports = async (req, res) => {
         const billingCycle = billing === 'yearly' ? 'yearly' : 'monthly';
         const amount = billingCycle === 'yearly' ? planDetails.priceYearly : planDetails.priceMonthly;
 
-        // Add domain registration fee if new domain
+        // Add domain registration fee if new domain — re-checked server-side
         let domainFee = 0;
+        let domainPurchasePriceUsd = null;
         if (domainAction === 'register') {
-            domainFee = getDomainPrice(domain);
+            const domainPricing = await getDomainPrice(domain);
+            domainFee = domainPricing.price;
+            domainPurchasePriceUsd = domainPricing.purchasePriceUsd;
         }
 
         const totalAmount = amount + domainFee;
@@ -97,6 +124,7 @@ module.exports = async (req, res) => {
             domainFee,
             domain,
             domainAction: domainAction || 'existing',
+            domainPurchasePriceUsd,
             email,
             firstName: firstName || '',
             lastName: lastName || '',
