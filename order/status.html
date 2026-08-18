@@ -4,136 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Status — Brandfletch Dev Studio</title>
-    <link rel="stylesheet" href="/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        .order-status-container {
-            min-height: 70vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem;
-        }
-        .order-status-card {
-            max-width: 540px;
-            width: 100%;
-            background: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 12px;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-        .order-status-card h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #f4f4f5;
-        }
-        .order-status-card p {
-            color: #a1a1aa;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-        .order-status-card .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid #27272a;
-            border-top-color: #8b5cf6;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .order-status-card .check {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: #22c55e;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .order-status-card .check::after {
-            content: '';
-            width: 24px;
-            height: 12px;
-            border-left: 3px solid #fff;
-            border-bottom: 3px solid #fff;
-            transform: rotate(-45deg) translate(2px, -2px);
-        }
-        .order-status-card .warn {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: #f59e0b;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-        .order-status-card .cross {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: #ef4444;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .order-status-card .cross::after {
-            content: '';
-            width: 24px;
-            height: 24px;
-            position: relative;
-        }
-        .order-status-card .cross::before,
-        .order-status-card .cross::after {
-            content: '';
-            position: absolute;
-            width: 28px;
-            height: 3px;
-            background: #fff;
-            border-radius: 2px;
-        }
-        .order-status-card .cross::before { transform: rotate(45deg); }
-        .order-status-card .cross::after { transform: rotate(-45deg); }
-        .order-status-card .btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
-            background: #8b5cf6;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-        .order-status-card .btn:hover { background: #7c3aed; }
-        .order-status-card .tx-ref {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: #71717a;
-            margin-top: 1.5rem;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <nav id="nav"></nav>
+    <nav id="nav" class="scrolled">
+        <a href="/" class="nav-logo"><span class="logo-text">Brandfletch</span></a>
+    </nav>
 
     <div class="order-status-container">
-        <div class="order-status-card" id="statusCard">
-            <div class="spinner"></div>
-            <h1>Verifying your payment...</h1>
-            <p>Please wait while we confirm your payment and set up your hosting account.</p>
+        <div class="ck-modal" style="max-width:520px;margin:4vh auto;">
+            <div class="ck-modal-header">
+                <h2 class="ck-title">Order Status</h2>
+            </div>
+            <div class="ck-modal-body" id="statusCard">
+                <div class="ck-spinner-wrap">
+                    <div class="ck-spinner"></div>
+                </div>
+                <h3 class="ck-status-heading">Verifying your payment...</h3>
+                <p class="ck-status-text">Please wait while we confirm your payment and set up your hosting account.</p>
+            </div>
         </div>
     </div>
+
+    <style>
+        .order-status-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 1rem 2rem;
+        }
+        .ck-spinner-wrap { text-align: center; margin-bottom: 1.5rem; }
+        .ck-spinner {
+            width: 48px; height: 48px;
+            border: 3px solid var(--border, #252533);
+            border-top-color: var(--accent, #7c5cff);
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: ck-spin 0.8s linear infinite;
+        }
+        @keyframes ck-spin { to { transform: rotate(360deg); } }
+        .ck-status-icon {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; font-weight: 700;
+        }
+        .ck-icon-ok { background: #22c55e; }
+        .ck-icon-ok::after { content: ''; width: 22px; height: 11px; border-left: 3px solid #fff; border-bottom: 3px solid #fff; transform: rotate(-45deg) translate(2px,-2px); }
+        .ck-icon-warn { background: #f59e0b; color: #fff; }
+        .ck-icon-error { background: #ef4444; }
+        .ck-icon-error::before, .ck-icon-error::after { content: ''; position: absolute; width: 24px; height: 3px; background: #fff; border-radius: 2px; }
+        .ck-icon-error::before { transform: rotate(45deg); }
+        .ck-icon-error::after { transform: rotate(-45deg); }
+        .ck-status-heading { font-size: 1.35rem; font-weight: 600; text-align: center; margin-bottom: 0.5rem; color: var(--text, #e8e8f0); }
+        .ck-status-text { text-align: center; color: var(--text-muted, #8888a0); line-height: 1.6; margin-bottom: 1.5rem; font-size: 0.92rem; }
+        .ck-status-btn { display: block; text-align: center; padding: 0.75rem 1.5rem; background: var(--accent, #7c5cff); color: #fff; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 0.95rem; transition: background 0.2s; }
+        .ck-status-btn:hover { background: var(--accent-hover, #9479ff); }
+        .ck-tx-ref { font-family: var(--font-mono, monospace); font-size: 0.8rem; color: var(--text-muted, #8888a0); text-align: center; margin-top: 1.5rem; }
+        .ck-status-detail { background: var(--bg-card, #16161f); border: 1px solid var(--border, #252533); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-muted, #8888a0); }
+        .ck-status-detail strong { color: var(--text, #e8e8f0); }
+    </style>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -141,36 +76,35 @@
         const status = params.get('status');
         const card = document.getElementById('statusCard');
 
+        const iconWrap = (cls) => '<div class="ck-status-icon ' + cls + '" style="position:relative;"></div>';
+        const btn = (href, label) => '<a href="' + href + '" class="ck-status-btn">' + label + '</a>';
+        const ref = '<div class="ck-tx-ref">Order ref: ' + txRef + '</div>';
+
         if (status === 'success') {
             card.innerHTML =
-                '<div class="check"></div>' +
-                '<h1>Payment confirmed</h1>' +
-                '<p>Your hosting account is being provisioned. You will receive an email with your cPanel login details shortly.</p>' +
-                '<a href="/" class="btn">Back to home</a>' +
-                '<div class="tx-ref">Order ref: ' + txRef + '</div>';
+                iconWrap('ck-icon-ok') +
+                '<h3 class="ck-status-heading">Payment confirmed</h3>' +
+                '<p class="ck-status-text">Your hosting account is being provisioned. You will receive an email with your cPanel login details shortly.</p>' +
+                btn('/', 'Back to home') + ref;
         } else if (status === 'provisioning_failed') {
             card.innerHTML =
-                '<div class="warn">!</div>' +
-                '<h1>Payment received</h1>' +
-                '<p>Your payment was successful, but we encountered an issue while provisioning your account. Our team has been notified and will set up your hosting manually within 24 hours.</p>' +
-                '<a href="/" class="btn">Back to home</a>' +
-                '<div class="tx-ref">Order ref: ' + txRef + '</div>';
+                '<div class="ck-status-icon ck-icon-warn">!</div>' +
+                '<h3 class="ck-status-heading">Payment received</h3>' +
+                '<p class="ck-status-text">Your payment was successful, but we encountered an issue while provisioning your account. Our team has been notified and will set up your hosting manually within 24 hours.</p>' +
+                btn('/', 'Back to home') + ref;
         } else if (status === 'failed') {
             card.innerHTML =
-                '<div class="cross"></div>' +
-                '<h1>Payment failed</h1>' +
-                '<p>Your payment could not be completed. Please try again or contact us for assistance.</p>' +
-                '<a href="/#hosting" class="btn">Try again</a>' +
-                '<div class="tx-ref">Order ref: ' + txRef + '</div>';
+                '<div class="ck-status-icon ck-icon-error" style="position:relative;"></div>' +
+                '<h3 class="ck-status-heading">Payment failed</h3>' +
+                '<p class="ck-status-text">Your payment could not be completed. Please try again or contact us for assistance.</p>' +
+                btn('/#hosting', 'Try again') + ref;
         } else if (status === 'error') {
             card.innerHTML =
-                '<div class="cross"></div>' +
-                '<h1>Something went wrong</h1>' +
-                '<p>We could not verify your payment. Please contact us with your order reference.</p>' +
-                '<a href="/#contact" class="btn">Contact us</a>' +
-                '<div class="tx-ref">Order ref: ' + txRef + '</div>';
+                '<div class="ck-status-icon ck-icon-error" style="position:relative;"></div>' +
+                '<h3 class="ck-status-heading">Something went wrong</h3>' +
+                '<p class="ck-status-text">We could not verify your payment. Please contact us with your order reference.</p>' +
+                btn('/#contact', 'Contact us') + ref;
         }
     </script>
-    <script src="/js/main.js"></script>
 </body>
 </html>
