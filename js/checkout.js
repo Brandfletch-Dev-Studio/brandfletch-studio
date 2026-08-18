@@ -18,14 +18,22 @@
     let domainPriceMwk = null;
     let domainCheckTimer = null;
 
+    // Persisted form values (survive step transitions)
+    let savedDomain = '';
+    let savedExistingDomain = '';
+    let savedFirstName = '';
+    let savedLastName = '';
+    let savedEmail = '';
+    let savedPassword = '';
+
     // --- Plan data (mirrors backend) ---
     const PLANS = {
         'wordpress-starter':    { name: 'WordPress Starter',  priceMonthly: 30000,  priceYearly: 300000  },
         'wordpress-business':   { name: 'WordPress Business', priceMonthly: 60000,  priceYearly: 600000  },
         'wordpress-agency':     { name: 'WordPress Agency',   priceMonthly: 120000, priceYearly: 1200000 },
-        'cpanel-starter':       { name: 'cPanel Starter',    priceMonthly: 18000,  priceYearly: 180000  },
+        'cpanel-starter':       { name: 'cPanel Starter',     priceMonthly: 18000,  priceYearly: 180000  },
         'cpanel-business':      { name: 'cPanel Business',   priceMonthly: 36000,  priceYearly: 360000  },
-        'cpanel-agency':        { name: 'cPanel Agency',     priceMonthly: 72000,  priceYearly: 720000  }
+        'cpanel-agency':        { name: 'cPanel Agency',      priceMonthly: 72000,  priceYearly: 720000  }
     };
 
     // --- Helpers ---
@@ -44,6 +52,22 @@
         return hosting + domain;
     }
 
+    // Save form values from current DOM before navigating away
+    function saveFormValues() {
+        const di = document.getElementById('domainInput');
+        if (di) savedDomain = di.value.trim().toLowerCase();
+        const de = document.getElementById('domainExistingInput');
+        if (de) savedExistingDomain = de.value.trim().toLowerCase();
+        const fn = document.getElementById('firstNameInput');
+        if (fn) savedFirstName = fn.value.trim();
+        const ln = document.getElementById('lastNameInput');
+        if (ln) savedLastName = ln.value.trim();
+        const em = document.getElementById('emailInput');
+        if (em) savedEmail = em.value.trim();
+        const pw = document.getElementById('passwordInput');
+        if (pw) savedPassword = pw.value.trim();
+    }
+
     // --- Step templates ---
     function stepIndicator() {
         const steps = ['Plan', 'Domain', 'Account', 'Review'];
@@ -51,7 +75,7 @@
         steps.forEach((label, i) => {
             const num = i + 1;
             const cls = num === currentStep ? 'ck-step active' : (num < currentStep ? 'ck-step done' : 'ck-step');
-            html += '<div class="' + cls + '" data-step="' + num + '">';
+            html += '<div class="' + cls + '">';
             html += '<span class="ck-step-num">' + (num < currentStep ? '' : num) + '</span>';
             html += '<span class="ck-step-label">' + label + '</span>';
             html += '</div>';
@@ -103,13 +127,13 @@
                     </div>
                     <div id="domainRegisterBlock" style="display:${domainAction==='register'?'block':'none'};">
                         <div class="ck-input-group">
-                            <input type="text" id="domainInput" class="ck-input" placeholder="example.com" autocomplete="off">
+                            <input type="text" id="domainInput" class="ck-input" placeholder="example.com" value="${savedDomain}" autocomplete="off">
                             <button id="domainCheckBtn" class="ck-btn-input">Check</button>
                         </div>
                         <div id="domainResult" class="ck-domain-result"></div>
                     </div>
                     <div id="domainExistingBlock" style="display:${domainAction==='existing'?'block':'none'};">
-                        <input type="text" id="domainExistingInput" class="ck-input" placeholder="yourdomain.com" autocomplete="off">
+                        <input type="text" id="domainExistingInput" class="ck-input" placeholder="yourdomain.com" value="${savedExistingDomain}" autocomplete="off">
                         <p class="ck-hint">Point your domain's nameservers to us after checkout. We will send instructions.</p>
                     </div>
                 </div>
@@ -128,11 +152,11 @@
                 <div class="ck-section">
                     <p class="ck-label">Account details</p>
                     <div class="ck-form-grid">
-                        <input type="text" id="firstNameInput" class="ck-input" placeholder="First name" autocomplete="given-name">
-                        <input type="text" id="lastNameInput" class="ck-input" placeholder="Last name" autocomplete="family-name">
+                        <input type="text" id="firstNameInput" class="ck-input" placeholder="First name" value="${savedFirstName}" autocomplete="given-name">
+                        <input type="text" id="lastNameInput" class="ck-input" placeholder="Last name" value="${savedLastName}" autocomplete="family-name">
                     </div>
-                    <input type="email" id="emailInput" class="ck-input ck-input-full" placeholder="Email address" autocomplete="email">
-                    <input type="password" id="passwordInput" class="ck-input ck-input-full" placeholder="cPanel password (leave blank to auto-generate)" autocomplete="new-password">
+                    <input type="email" id="emailInput" class="ck-input ck-input-full" placeholder="Email address" value="${savedEmail}" autocomplete="email">
+                    <input type="password" id="passwordInput" class="ck-input ck-input-full" placeholder="cPanel password (leave blank to auto-generate)" value="${savedPassword}" autocomplete="new-password">
                     <p class="ck-hint">Your cPanel login credentials will be sent to this email address.</p>
                 </div>
                 <div class="ck-actions">
@@ -146,13 +170,8 @@
     function step4HTML() {
         const price = getCurrentPrice();
         const domainFee = (domainAction === 'register' && domainAvailable === true && domainPriceMwk) ? domainPriceMwk : 0;
-        const domainName = domainAction === 'register'
-            ? (document.getElementById('domainInput')?.value || '').trim()
-            : (document.getElementById('domainExistingInput')?.value || '').trim();
+        const domainName = domainAction === 'register' ? savedDomain : savedExistingDomain;
         const billingLabel = selectedBilling === 'yearly' ? 'yearly' : 'monthly';
-        const firstName = (document.getElementById('firstNameInput')?.value || '').trim();
-        const lastName = (document.getElementById('lastNameInput')?.value || '').trim();
-        const email = (document.getElementById('emailInput')?.value || '').trim();
 
         return `
             <div class="ck-step-content" id="step4Content">
@@ -168,8 +187,8 @@
                     </div>
                     <div class="ck-review-section">
                         <p class="ck-label">Account</p>
-                        <div class="ck-review-row"><span>Name</span><span>${firstName} ${lastName}</span></div>
-                        <div class="ck-review-row"><span>Email</span><span>${email}</span></div>
+                        <div class="ck-review-row"><span>Name</span><span>${savedFirstName} ${savedLastName}</span></div>
+                        <div class="ck-review-row"><span>Email</span><span>${savedEmail}</span></div>
                     </div>
                     <div class="ck-review-total">
                         <div class="ck-review-row"><span>Total due now</span><span class="ck-total-amount">${fmtMWK(getTotal())}</span></div>
@@ -211,6 +230,7 @@
     }
 
     function goToStep(n) {
+        saveFormValues();
         currentStep = n;
         renderStep();
     }
@@ -273,20 +293,17 @@
 
     function validateStep2() {
         if (domainAction === 'register') {
-            const domain = (document.getElementById('domainInput')?.value || '').trim().toLowerCase();
-            if (!domain) return 'Please enter a domain name';
+            if (!savedDomain) return 'Please enter a domain name';
             if (domainAvailable !== true) return 'Please check domain availability first';
         } else {
-            const domain = (document.getElementById('domainExistingInput')?.value || '').trim().toLowerCase();
-            if (!domain) return 'Please enter your existing domain name';
+            if (!savedExistingDomain) return 'Please enter your existing domain name';
         }
         return null;
     }
 
     function validateStep3() {
-        const email = (document.getElementById('emailInput')?.value || '').trim();
-        if (!email) return 'Please enter your email address';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Please enter a valid email address';
+        if (!savedEmail) return 'Please enter your email address';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(savedEmail)) return 'Please enter a valid email address';
         return null;
     }
 
@@ -296,13 +313,7 @@
         const submitBtn = document.getElementById('ckSubmit');
         if (errorEl) errorEl.style.display = 'none';
 
-        const domain = domainAction === 'register'
-            ? (document.getElementById('domainInput')?.value || '').trim().toLowerCase()
-            : (document.getElementById('domainExistingInput')?.value || '').trim().toLowerCase();
-        const firstName = (document.getElementById('firstNameInput')?.value || '').trim();
-        const lastName = (document.getElementById('lastNameInput')?.value || '').trim();
-        const email = (document.getElementById('emailInput')?.value || '').trim();
-        const password = (document.getElementById('passwordInput')?.value || '').trim();
+        const domain = domainAction === 'register' ? savedDomain : savedExistingDomain;
 
         if (submitBtn) { submitBtn.textContent = 'Processing...'; submitBtn.disabled = true; }
 
@@ -315,8 +326,10 @@
                     category: selectedCategory,
                     billing: selectedBilling,
                     domain, domainAction,
-                    firstName, lastName, email,
-                    password: password || undefined
+                    firstName: savedFirstName,
+                    lastName: savedLastName,
+                    email: savedEmail,
+                    password: savedPassword || undefined
                 })
             });
             const data = await res.json();
@@ -348,7 +361,6 @@
                 btn.addEventListener('click', function() {
                     selectedBilling = this.dataset.billing;
                     billingToggle.querySelectorAll('.ck-toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.billing === selectedBilling));
-                    // Update price display
                     const priceEl = document.querySelector('.ck-price-amount');
                     const periodEl = document.querySelector('.ck-price-period');
                     if (priceEl) priceEl.textContent = fmtMWK(getCurrentPrice());
@@ -394,6 +406,7 @@
         if (ckBack2) ckBack2.addEventListener('click', () => goToStep(1));
         const ckNext2 = document.getElementById('ckNext2');
         if (ckNext2) ckNext2.addEventListener('click', () => {
+            saveFormValues();
             const err = validateStep2();
             if (err) {
                 const result = document.getElementById('domainResult');
@@ -406,6 +419,7 @@
         if (ckBack3) ckBack3.addEventListener('click', () => goToStep(2));
         const ckNext3 = document.getElementById('ckNext3');
         if (ckNext3) ckNext3.addEventListener('click', () => {
+            saveFormValues();
             const err = validateStep3();
             if (err) {
                 const emailInput = document.getElementById('emailInput');
@@ -430,6 +444,12 @@
         domainAction = 'register';
         domainAvailable = null;
         domainPriceMwk = null;
+        savedDomain = '';
+        savedExistingDomain = '';
+        savedFirstName = '';
+        savedLastName = '';
+        savedEmail = '';
+        savedPassword = '';
 
         if (!document.getElementById('checkoutModal')) {
             buildModal();
