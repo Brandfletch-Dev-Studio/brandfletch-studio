@@ -21,19 +21,19 @@
       "id": "s2",
       "title": "WordPress Hosting",
       "desc": "Managed WordPress hosting with automatic updates, daily backups, and active security monitoring.",
-      "model": "From MWK 8,000/mo"
+      "model": "From MWK 30,000/mo"
     },
     {
       "id": "s3",
       "title": "Full cPanel Hosting",
       "desc": "Complete web hosting with cPanel access. Host any platform — WordPress, Joomla, custom, or anything else.",
-      "model": "From MWK 6,000/mo"
+      "model": "From MWK 18,000/mo"
     },
     {
       "id": "s4",
       "title": "Care & Maintenance",
       "desc": "Ongoing security patches, updates, and daily backups. Your site stays current and protected without you lifting a finger.",
-      "model": "From MWK 10,000/mo"
+      "model": "From MWK 30,000/mo"
     },
     {
       "id": "s5",
@@ -50,96 +50,91 @@
   ],
   "hostingWordPress": [
     {
-      "id": "wp1",
       "name": "Starter",
-      "tagline": "For a single WordPress site that needs to be online and fast.",
-      "priceMonthlyMWK": 8000,
-      "priceYearlyMWK": 80000,
+      "tagline": "Managed WordPress for a single site.",
+      "priceMonthlyMWK": 30000,
+      "priceYearlyMWK": 300000,
       "features": [
         "1 WordPress website",
-        "5GB SSD storage",
-        "Free SSL certificate",
-        "5 professional email accounts",
-        "Weekly backups",
+        "10GB SSD storage",
+        "Free SSL",
+        "5 email accounts",
+        "Daily backups",
+        "Automatic WP updates",
         "Standard support"
-      ],
-      "highlighted": false
+      ]
     },
     {
-      "id": "wp2",
       "name": "Business",
-      "tagline": "For businesses running a few WordPress sites.",
-      "priceMonthlyMWK": 18000,
-      "priceYearlyMWK": 180000,
+      "tagline": "Managed WordPress for businesses running multiple sites.",
+      "priceMonthlyMWK": 60000,
+      "priceYearlyMWK": 600000,
       "features": [
         "Up to 5 WordPress websites",
-        "20GB SSD storage",
-        "Free SSL certificate",
-        "20 professional email accounts",
+        "30GB SSD storage",
+        "Free SSL",
+        "Unlimited email accounts",
         "Daily backups",
-        "Free migration from your current host",
+        "Automatic WP updates",
+        "Free migration",
         "Priority support"
       ],
       "highlighted": true
     },
     {
-      "id": "wp3",
       "name": "Agency",
-      "tagline": "For agencies managing many client sites.",
-      "priceMonthlyMWK": 35000,
-      "priceYearlyMWK": 350000,
+      "tagline": "Managed WordPress for agencies managing many client sites.",
+      "priceMonthlyMWK": 120000,
+      "priceYearlyMWK": 1200000,
       "features": [
         "Unlimited WordPress websites",
-        "50GB SSD storage",
-        "Free SSL certificates",
-        "Unlimited email accounts",
+        "75GB SSD storage",
+        "Free SSL",
+        "Unlimited email",
         "Daily backups & malware scanning",
-        "Dedicated support contact"
-      ],
-      "highlighted": false
+        "Automatic WP updates",
+        "Staging environments",
+        "Dedicated support"
+      ]
     }
   ],
   "hostingCpanel": [
     {
-      "id": "cp1",
       "name": "Starter",
       "tagline": "Full cPanel hosting for a single website.",
-      "priceMonthlyMWK": 6000,
-      "priceYearlyMWK": 60000,
+      "priceMonthlyMWK": 18000,
+      "priceYearlyMWK": 180000,
       "features": [
         "1 domain",
-        "5GB SSD storage",
+        "10GB SSD storage",
         "Full cPanel access",
         "Free SSL certificate",
-        "5 professional email accounts",
+        "5 email accounts",
         "Weekly backups",
         "Standard support"
-      ],
-      "highlighted": false
+      ]
     },
     {
-      "id": "cp2",
       "name": "Business",
       "tagline": "cPanel hosting for growing businesses.",
-      "priceMonthlyMWK": 15000,
-      "priceYearlyMWK": 150000,
+      "priceMonthlyMWK": 36000,
+      "priceYearlyMWK": 360000,
       "features": [
         "Up to 5 domains",
-        "25GB SSD storage",
+        "50GB SSD storage",
         "Full cPanel access",
         "Free SSL certificate",
-        "20 professional email accounts",
+        "Unlimited email accounts",
         "Daily backups",
         "Priority support"
       ],
       "highlighted": true
     },
     {
-      "id": "cp3",
       "name": "Agency",
       "tagline": "Full cPanel hosting with room to scale.",
-      "priceMonthlyMWK": 30000,
-      "priceYearlyMWK": 300000,
+      "priceMonthlyMWK": 72000,
+      "priceYearlyMWK": 720000,
       "features": [
         "Unlimited domains",
         "100GB SSD storage",
@@ -147,9 +142,8 @@
         "Free SSL certificates",
         "Unlimited email accounts",
         "Daily backups & malware scanning",
-        "Dedicated support contact"
-      ],
-      "highlighted": false
+        "Dedicated support"
+      ]
     }
   ],
   "hostingNote": "Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans include free SSL and active uptime monitoring.",

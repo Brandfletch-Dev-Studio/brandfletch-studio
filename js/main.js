@@ -21,21 +21,21 @@ const defaultContent = {
     },
     services: [
         { title: 'Custom Website Development', desc: 'Custom-designed and built from scratch. No templates, no bloated plugins — just clean code tailored to your business.', model: 'Project-based' },
-        { title: 'WordPress Hosting', desc: 'Managed WordPress hosting with automatic updates, daily backups, and active security monitoring.', model: 'From MWK 8,000/mo' },
-        { title: 'Full cPanel Hosting', desc: 'Complete web hosting with cPanel access. Host any platform — WordPress, Joomla, custom, or anything else.', model: 'From MWK 6,000/mo' },
-        { title: 'Care & Maintenance', desc: 'Ongoing security patches, updates, and daily backups. Your site stays current and protected.', model: 'From MWK 10,000/mo' },
+        { title: 'WordPress Hosting', desc: 'Managed WordPress hosting with automatic updates, daily backups, and active security monitoring.', model: 'From MWK 30,000/mo' },
+        { title: 'Full cPanel Hosting', desc: 'Complete web hosting with cPanel access. Host any platform — WordPress, Joomla, custom, or anything else.', model: 'From MWK 18,000/mo' },
+        { title: 'Care & Maintenance', desc: 'Ongoing security patches, updates, and daily backups. Your site stays current and protected.', model: 'From MWK 30,000/mo' },
         { title: 'Website Migration', desc: 'Already hosted elsewhere? We move your site with zero downtime.', model: 'One-time fee' },
         { title: 'Custom Web Apps & Systems', desc: 'Outgrown your current setup? We build the custom app, API, or platform your business needs next.', model: 'Project-based' }
     ],
     hostingWordPress: [
-        { name: 'Starter', tagline: 'For a single WordPress site.', priceMonthlyMWK: 8000, priceYearlyMWK: 80000, features: ['1 WordPress website', '5GB SSD storage', 'Free SSL', '5 email accounts', 'Weekly backups', 'Standard support'] },
-        { name: 'Business', tagline: 'For businesses running a few WordPress sites.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['Up to 5 WordPress websites', '20GB SSD storage', 'Free SSL', '20 email accounts', 'Daily backups', 'Free migration', 'Priority support'], highlighted: true },
-        { name: 'Agency', tagline: 'For agencies managing many client sites.', priceMonthlyMWK: 35000, priceYearlyMWK: 350000, features: ['Unlimited WordPress websites', '50GB SSD storage', 'Free SSL', 'Unlimited email', 'Daily backups & malware scanning', 'Dedicated support'] }
+        { name: 'Starter', tagline: 'Managed WordPress for a single site.', priceMonthlyMWK: 30000, priceYearlyMWK: 300000, features: ['1 WordPress website', '10GB SSD storage', 'Free SSL', '5 email accounts', 'Daily backups', 'Automatic WP updates', 'Standard support'] },
+        { name: 'Business', tagline: 'Managed WordPress for businesses running multiple sites.', priceMonthlyMWK: 60000, priceYearlyMWK: 600000, features: ['Up to 5 WordPress websites', '30GB SSD storage', 'Free SSL', 'Unlimited email accounts', 'Daily backups', 'Automatic WP updates', 'Free migration', 'Priority support'], highlighted: true },
+        { name: 'Agency', tagline: 'Managed WordPress for agencies managing many client sites.', priceMonthlyMWK: 120000, priceYearlyMWK: 1200000, features: ['Unlimited WordPress websites', '75GB SSD storage', 'Free SSL', 'Unlimited email', 'Daily backups & malware scanning', 'Automatic WP updates', 'Staging environments', 'Dedicated support'] }
     ],
     hostingCpanel: [
-        { name: 'Starter', tagline: 'Full cPanel hosting for a single website.', priceMonthlyMWK: 6000, priceYearlyMWK: 60000, features: ['1 domain', '5GB SSD storage', 'Full cPanel access', 'Free SSL', '5 email accounts', 'Weekly backups', 'Standard support'] },
-        { name: 'Business', tagline: 'cPanel hosting for growing businesses.', priceMonthlyMWK: 15000, priceYearlyMWK: 150000, features: ['Up to 5 domains', '25GB SSD storage', 'Full cPanel access', 'Free SSL', '20 email accounts', 'Daily backups', 'Priority support'], highlighted: true },
-        { name: 'Agency', tagline: 'Full cPanel hosting with room to scale.', priceMonthlyMWK: 30000, priceYearlyMWK: 300000, features: ['Unlimited domains', '100GB SSD storage', 'Full cPanel access', 'Free SSL', 'Unlimited email', 'Daily backups & malware scanning', 'Dedicated support'] }
+        { name: 'Starter', tagline: 'Full cPanel hosting for a single website.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['1 domain', '10GB SSD storage', 'Full cPanel access', 'Free SSL', '5 email accounts', 'Weekly backups', 'Standard support'] },
+        { name: 'Business', tagline: 'cPanel hosting for growing businesses.', priceMonthlyMWK: 36000, priceYearlyMWK: 360000, features: ['Up to 5 domains', '50GB SSD storage', 'Full cPanel access', 'Free SSL', 'Unlimited email accounts', 'Daily backups', 'Priority support'], highlighted: true },
+        { name: 'Agency', tagline: 'Full cPanel hosting with room to scale.', priceMonthlyMWK: 72000, priceYearlyMWK: 720000, features: ['Unlimited domains', '100GB SSD storage', 'Full cPanel access', 'Free SSL', 'Unlimited email accounts', 'Daily backups & malware scanning', 'Dedicated support'] }
     ],
     hostingNote: 'Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans include free SSL and active uptime monitoring.',
     addons: [
@@ -164,7 +164,7 @@ function renderHosting() {
             <ul class="pricing-features">
                 ${(p.features || []).map(f => `<li>${f}</li>`).join('')}
             </ul>
-            <a href="#contact" class="btn btn-ghost pricing-cta">Get Started</a>
+            <a href="#order" class="btn btn-ghost pricing-cta" data-plan="${p.name}" data-category="${wpGrid ? 'wordpress' : 'cpanel'}">Order Now</a>
         </div>
     `;
 
