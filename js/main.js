@@ -21,7 +21,6 @@ const defaultContent = {
     },
     services: [
         { title: 'Custom Website Development', desc: 'Custom-designed and built from scratch. No templates, no bloated plugins — just clean code tailored to your business.', model: 'Project-based' },
-        { title: 'Managed Web Hosting', desc: 'Managed web hosting with automatic updates, daily backups, and active security monitoring.', model: 'From MWK 18,000/mo' },
         { title: 'Full cPanel Hosting', desc: 'Complete web hosting with cPanel access. Host any platform — WordPress, Joomla, custom, or anything else.', model: 'From MWK 18,000/mo' },
         { title: 'Care & Maintenance', desc: 'Ongoing security patches, updates, and daily backups. Your site stays current and protected.', model: 'From MWK 30,000/mo' },
         { title: 'Website Migration', desc: 'Already hosted elsewhere? We move your site with zero downtime.', model: 'One-time fee' },
@@ -46,7 +45,7 @@ const defaultContent = {
         heading: 'Brandfletch Dev Studio',
         paragraphs: [
             'Brandfletch Dev Studio is a Malawian software studio that designs, builds, and hosts websites and web applications. We build custom platforms from scratch — not templates — tailored to the specific needs of each business we work with.',
-            'Beyond custom development, we offer full web hosting with cPanel access and managed web hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.',
+            'Beyond custom development, we offer full web hosting with cPanel access. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.',
             'We have built and maintain a portfolio of platforms serving thousands of users across e-commerce, education, accounting, advertising, and communications. Every project we take on is built to scale.'
         ],
     },

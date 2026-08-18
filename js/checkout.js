@@ -180,7 +180,7 @@
                     </div>
                     <div class="ck-review-section">
                         <p class="ck-label">Domain</p>
-                        <div class="ck-review-row"><span>${domainName || '—'}</span><span>${domainAction === 'register' ? (domainFee ? fmtMWK(domainFee) + ' /year' : '—') : 'Existing domain'}</span></div>
+                        <div class="ck-review-row"><span>${domainName || '—'}</span><span>${domainAction === 'register' ? (domainFee ? fmtMWK(domainFee) + ' /year' : 'Pricing confirmed at checkout') : 'Existing domain'}</span></div>
                     </div>
                     <div class="ck-review-section">
                         <p class="ck-label">Account</p>
@@ -264,6 +264,7 @@
                     result.className = 'ck-domain-result ck-domain-ok';
                     result.innerHTML = 'Available — <strong>' + fmtMWK(data.priceMwk) + '/year</strong>';
                 } else {
+                    domainPriceMwk = null;
                     result.className = 'ck-domain-result ck-domain-ok';
                     result.textContent = 'Available — pricing confirmed at checkout';
                 }

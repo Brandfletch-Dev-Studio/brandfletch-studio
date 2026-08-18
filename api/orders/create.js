@@ -14,13 +14,18 @@ const PLANS = {
     'cpanel-agency':        { name: 'cPanel Agency',     priceMonthly: 72000,  priceYearly: 720000,  whmPlan: 'cp_agency',     type: 'cpanel' }
 };
 
-const DOMAIN_PRICES = {
-    '.com': 15000, '.net': 16000, '.org': 14000,
-    '.co': 20000, '.io': 42000, '.biz': 12000,
-    '.info': 12000, '.co.uk': 8000, '.org.uk': 8000,
-    '.me': 18000, '.xyz': 10000, '.online': 25000,
-    '.store': 40000, '.tech': 35000, '.site': 12000
-};
+// Domain pricing is admin-configured via content.json (domainPricing array)
+
+function getContent() {
+    try {
+        const fs = require('fs');
+        const path = require('path');
+        const raw = fs.readFileSync(path.join(process.cwd(), 'content.json'), 'utf-8');
+        return JSON.parse(raw);
+    } catch {
+        return {};
+    }
+}
 
 function generateTxRef() {
     return 'BF-' + Date.now() + '-' + crypto.randomBytes(3).toString('hex');
@@ -35,14 +40,21 @@ function generatePassword() {
     return pwd;
 }
 
-function getDomainPriceFallback(domain) {
+function getDomainPriceFromConfig(domain) {
+    const content = getContent();
+    const pricing = content.domainPricing || [];
     const parts = domain.split('.');
     if (parts.length >= 3) {
         const tld2 = '.' + parts.slice(-2).join('.');
-        if (DOMAIN_PRICES[tld2]) return DOMAIN_PRICES[tld2];
+        for (const entry of pricing) {
+            if (entry.tld === tld2 && entry.priceMwk) return entry.priceMwk;
+        }
     }
     const tld = '.' + parts[parts.length - 1];
-    return DOMAIN_PRICES[tld] || 18000;
+    for (const entry of pricing) {
+        if (entry.tld === tld && entry.priceMwk) return entry.priceMwk;
+    }
+    return null;
 }
 
 async function getDomainPrice(domain) {
@@ -57,7 +69,7 @@ async function getDomainPrice(domain) {
                     priceUsd = result.premiumPriceUsd;
                     priceMwk = Math.round(priceUsd * MWK_PER_USD * DOMAIN_MARKUP);
                 } else {
-                    priceMwk = getDomainPriceFallback(domain);
+                    priceMwk = getDomainPriceFromConfig(domain);
                 }
                 return { price: priceMwk, purchasePriceUsd: priceUsd, premium: result.premium };
             }
@@ -65,7 +77,7 @@ async function getDomainPrice(domain) {
             console.error('Namecheap price check failed, using fallback pricing:', err.message);
         }
     }
-    return { price: getDomainPriceFallback(domain), purchasePriceUsd: null, premium: false };
+    return { price: getDomainPriceFromConfig(domain), purchasePriceUsd: null, premium: false };
 }
 
 module.exports = async (req, res) => {

@@ -141,6 +141,7 @@ function renderAll() {
     renderServices();
     renderHosting();
     renderAddons();
+    renderDomainPricing();
     renderAbout();
     renderMessages();
 }
@@ -580,6 +581,100 @@ async function deleteAddon(id) {
     renderOverview();
 }
 
+// --- Domain Pricing Render ---
+function renderDomainPricing() {
+    const list = document.getElementById('domainPricingList');
+    if (!list) return;
+    const pricing = content.domainPricing || [];
+    if (pricing.length === 0) {
+        list.innerHTML = '<p class="muted">No domain pricing configured. Add TLDs to show prices at checkout.</p>';
+        return;
+    }
+    list.innerHTML = pricing.map((p, i) => `
+        <div class="data-item">
+            <div class="data-item-main">
+                <span class="data-item-tag">${escape(p.tld)}</span>
+                <h3>${formatMWK(p.priceMwk)} /year</h3>
+                ${p.desc ? `<p>${escape(p.desc)}</p>` : ''}
+            </div>
+            <div class="data-item-actions">
+                <button class="btn btn-ghost" onclick="openDomainPricingEditor(${i})">Edit</button>
+                <button class="btn btn-danger" onclick="deleteDomainPricing(${i})">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// --- Domain Pricing CRUD ---
+function openDomainPricingEditor(index) {
+    const modal = document.getElementById('domainPricingModal');
+    const form = document.getElementById('domainPricingForm');
+    const title = document.getElementById('domainPricingTitle');
+
+    if (index !== undefined && index !== null) {
+        title.textContent = 'Edit Domain Pricing';
+        const entry = (content.domainPricing || [])[index] || {};
+        document.getElementById('domainPricingIndex').value = index;
+        document.getElementById('domainPricingTld').value = entry.tld || '';
+        document.getElementById('domainPricingPrice').value = entry.priceMwk || '';
+        document.getElementById('domainPricingDesc').value = entry.desc || '';
+    } else {
+        title.textContent = 'Add Domain Pricing';
+        form.reset();
+        document.getElementById('domainPricingIndex').value = '';
+    }
+    modal.classList.remove('hidden');
+}
+
+function closeDomainPricingModal() {
+    document.getElementById('domainPricingModal').classList.add('hidden');
+}
+
+async function saveDomainPricing(e) {
+    e.preventDefault();
+    const index = document.getElementById('domainPricingIndex').value;
+    const entry = {
+        tld: document.getElementById('domainPricingTld').value.trim().toLowerCase(),
+        priceMwk: parseInt(document.getElementById('domainPricingPrice').value, 10),
+        desc: document.getElementById('domainPricingDesc').value.trim()
+    };
+
+    if (!entry.tld || !entry.priceMwk) return;
+    if (!entry.tld.startsWith('.')) entry.tld = '.' + entry.tld;
+
+    if (!content.domainPricing) content.domainPricing = [];
+
+    if (index !== '') {
+        content.domainPricing[parseInt(index, 10)] = entry;
+    } else {
+        const existing = content.domainPricing.findIndex(p => p.tld === entry.tld);
+        if (existing !== -1) {
+            content.domainPricing[existing] = entry;
+        } else {
+            content.domainPricing.push(entry);
+        }
+    }
+
+    try {
+        await saveContent();
+        closeDomainPricingModal();
+        renderDomainPricing();
+    } catch (err) {
+        alert('Failed to save: ' + err.message);
+    }
+}
+
+async function deleteDomainPricing(index) {
+    if (!confirm('Delete this domain pricing entry?')) return;
+    content.domainPricing.splice(index, 1);
+    try {
+        await saveContent();
+        renderDomainPricing();
+    } catch (err) {
+        alert('Failed to delete: ' + err.message);
+    }
+}
+
 // --- About Save ---
 async function saveAbout() {
     const status = document.getElementById('aboutStatus');
@@ -661,6 +756,12 @@ function formatDate(iso) {
     if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
     return d.toLocaleDateString();
 }
+
+// --- Domain Pricing form submit ---
+document.addEventListener('DOMContentLoaded', function() {
+    const dpForm = document.getElementById('domainPricingForm');
+    if (dpForm) dpForm.addEventListener('submit', saveDomainPricing);
+});
 
 // ===================================
 // CLIENT MANAGEMENT

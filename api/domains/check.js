@@ -1,28 +1,46 @@
 // /api/domains/check — Check domain availability
 // Uses Namecheap API when configured (real availability + premium pricing).
 // Falls back to free RDAP lookup if Namecheap credentials are not set.
+// Domain pricing is admin-configured via content.json (domainPricing array).
 // GET /api/domains/check?domain=example.com
 
 const MWK_PER_USD = 6000;
 const DOMAIN_MARKUP = 1.15;
 
-// Fixed domain pricing per year (at MWK 6000/$ with 15% markup)
-const DOMAIN_PRICES = {
-    '.com': 15000, '.net': 16000, '.org': 14000,
-    '.co': 20000, '.io': 42000, '.biz': 12000,
-    '.info': 12000, '.co.uk': 8000, '.org.uk': 8000,
-    '.me': 18000, '.xyz': 10000, '.online': 25000,
-    '.store': 40000, '.tech': 35000, '.site': 12000
-};
-
-function getDomainPriceFallback(domain) {
-    const parts = domain.split('.');
-    if (parts.length >= 3) {
-        const tld2 = '.' + parts.slice(-2).join('.');
-        if (DOMAIN_PRICES[tld2]) return DOMAIN_PRICES[tld2];
+function getContent() {
+    try {
+        const fs = require('fs');
+        const path = require('path');
+        const raw = fs.readFileSync(path.join(process.cwd(), 'content.json'), 'utf-8');
+        return JSON.parse(raw);
+    } catch {
+        return {};
     }
-    const tld = '.' + parts[parts.length - 1];
-    return DOMAIN_PRICES[tld] || 18000;
+}
+
+function getDomainPriceFromConfig(domain) {
+    const content = getContent();
+    const pricing = content.domainPricing || [];
+    const parts = domain.split('.');
+    const tld = parts.length >= 3
+        ? '.' + parts.slice(-2).join('.')
+        : '.' + parts[parts.length - 1];
+
+    // Try exact TLD match first (e.g. .co.uk), then single-level
+    for (const entry of pricing) {
+        if (entry.tld === tld && entry.priceMwk) {
+            return entry.priceMwk;
+        }
+    }
+    const simpleTld = '.' + parts[parts.length - 1];
+    for (const entry of pricing) {
+        if (entry.tld === simpleTld && entry.priceMwk) {
+            return entry.priceMwk;
+        }
+    }
+
+    // No match — return null (price determined manually)
+    return null;
 }
 
 module.exports = async (req, res) => {
@@ -49,6 +67,9 @@ module.exports = async (req, res) => {
         return;
     }
 
+    // Get admin-configured price for this domain
+    const configuredPrice = getDomainPriceFromConfig(domain);
+
     // Prefer Namecheap — gives real availability
     const { checkAvailability, isConfigured } = require('../../lib/namecheap');
     if (isConfigured()) {
@@ -65,20 +86,20 @@ module.exports = async (req, res) => {
                 return;
             }
 
-            // Pricing: use premium price from Namecheap if available, else fallback table
-            let priceMwk;
+            // Pricing: use premium price from Namecheap if available, else admin config, else null
+            let priceMwk = null;
             let priceUsd = null;
             if (result.premium && result.premiumPriceUsd) {
                 priceUsd = result.premiumPriceUsd;
                 priceMwk = Math.round(priceUsd * MWK_PER_USD * DOMAIN_MARKUP);
             } else {
-                priceMwk = getDomainPriceFallback(domain);
+                priceMwk = configuredPrice;
             }
 
             res.status(200).json({
                 domain,
                 available: true,
-                message: 'Domain is available for registration',
+                message: priceMwk ? 'Domain is available for registration' : 'Domain is available — pricing confirmed at checkout',
                 premium: result.premium,
                 priceMwk,
                 priceUsd,
@@ -90,7 +111,7 @@ module.exports = async (req, res) => {
         }
     }
 
-    // Fallback — free RDAP lookup (availability only, no live pricing)
+    // Fallback — free RDAP lookup (availability only)
     try {
         const rdapUrl = 'https://rdap.org/domain/' + domain;
         const response = await fetch(rdapUrl, {
@@ -100,12 +121,11 @@ module.exports = async (req, res) => {
         });
 
         if (response.status === 404) {
-            const priceMwk = getDomainPriceFallback(domain);
             res.status(200).json({
                 domain,
                 available: true,
-                message: 'Domain is available for registration',
-                priceMwk,
+                message: configuredPrice ? 'Domain is available for registration' : 'Domain is available — pricing confirmed at checkout',
+                priceMwk: configuredPrice,
                 source: 'rdap'
             });
         } else if (response.ok) {
@@ -127,6 +147,7 @@ module.exports = async (req, res) => {
                 domain,
                 available: true,
                 message: 'Domain appears to be available',
+                priceMwk: configuredPrice,
                 source: 'rdap'
             });
         }

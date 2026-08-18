@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +38,7 @@
                 <button class="nav-item" data-view="services">Services</button>
                 <button class="nav-item" data-view="hosting">Hosting Packages</button>
                 <button class="nav-item" data-view="addons">Add-ons</button>
+                <button class="nav-item" data-view="domains">Domain Pricing</button>
                 <button class="nav-item" data-view="projects">Projects</button>
                 <button class="nav-item" data-view="clients">Clients</button>
                 <button class="nav-item" data-view="clientsites">Client Sites</button>
@@ -129,6 +130,18 @@
                     <button class="btn btn-primary" onclick="openAddonEditor()">+ Add Add-on</button>
                 </div>
                 <div id="addonsList" class="data-list">
+                    <p class="muted">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Domain Pricing -->
+            <div class="view" id="view-domains">
+                <div class="view-header">
+                    <h1 class="view-title">Domain Pricing</h1>
+                    <button class="btn btn-primary" onclick="openDomainPricingEditor()">+ Add TLD</button>
+                </div>
+                <p class="muted" style="margin-bottom: 16px;">Set custom annual pricing for each top-level domain. Prices are shown to customers during checkout.</p>
+                <div id="domainPricingList" class="data-list">
                     <p class="muted">Loading...</p>
                 </div>
             </div>
@@ -392,6 +405,26 @@
                 <div class="modal-actions">
                     <button type="button" class="btn btn-ghost" onclick="closeInvoiceModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Domain Pricing Editor Modal -->
+    <div id="domainPricingModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="domainPricingTitle">Add Domain Pricing</h2>
+            <form id="domainPricingForm">
+                <input type="hidden" id="domainPricingIndex">
+                <label>TLD (e.g. .com, .net, .co.uk)</label>
+                <input type="text" id="domainPricingTld" placeholder=".com" required>
+                <label>Annual Price (MWK)</label>
+                <input type="number" id="domainPricingPrice" placeholder="15000" min="0" step="500" required>
+                <label>Description (optional)</label>
+                <input type="text" id="domainPricingDesc" placeholder="Popular for businesses">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" onclick="closeDomainPricingModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>
