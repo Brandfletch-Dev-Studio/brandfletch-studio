@@ -11,55 +11,70 @@ const defaultContent = {
     hero: {
         tag: 'Brandfletch Dev Studio',
         headingPre: 'We build',
-        headingAccent: 'WordPress websites',
+        headingAccent: 'custom websites',
         headingPost: 'and host them right.',
-        sub: 'Tell us what you need, we design and build your WordPress site, then keep it fast, secure, and online — with hosting billed simply in Malawi Kwacha.',
+        sub: 'From custom web apps to WordPress and cPanel hosting — we design, build, and host everything your business needs online. Billed in Malawi Kwacha.',
         ctaPrimaryLabel: 'See Hosting Plans',
         ctaPrimaryHref: '#hosting',
         ctaSecondaryLabel: 'Start a Project',
         ctaSecondaryHref: '#contact'
     },
     services: [
-        { title: 'WordPress Website Design & Build', desc: 'A custom-designed WordPress site built around your business.' },
-        { title: 'Website Migration', desc: 'Already have a site elsewhere? We move it over with zero downtime.' },
-        { title: 'Care & Maintenance Plans', desc: 'Ongoing updates, security patches, and backups.' },
-        { title: 'Custom Web Apps & Automations', desc: 'Outgrown WordPress? We can build the custom system you need next.' }
+        { title: 'Custom Website Development', desc: 'Custom-designed and built from scratch. No templates, no bloated plugins — just clean code tailored to your business.', model: 'Project-based' },
+        { title: 'WordPress Hosting', desc: 'Managed WordPress hosting with automatic updates, daily backups, and active security monitoring.', model: 'From MWK 8,000/mo' },
+        { title: 'Full cPanel Hosting', desc: 'Complete web hosting with cPanel access. Host any platform — WordPress, Joomla, custom, or anything else.', model: 'From MWK 6,000/mo' },
+        { title: 'Care & Maintenance', desc: 'Ongoing security patches, updates, and daily backups. Your site stays current and protected.', model: 'From MWK 10,000/mo' },
+        { title: 'Website Migration', desc: 'Already hosted elsewhere? We move your site with zero downtime.', model: 'One-time fee' },
+        { title: 'Custom Web Apps & Systems', desc: 'Outgrown your current setup? We build the custom app, API, or platform your business needs next.', model: 'Project-based' }
     ],
-    hostingPackages: [
-        { name: 'Starter', tagline: 'For a single site.', priceMonthlyMWK: 8000, priceYearlyMWK: 80000, features: ['1 website', 'Free SSL', 'Weekly backups'] },
-        { name: 'Business', tagline: 'For a few sites.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['Up to 5 websites', 'Free SSL', 'Daily backups'], highlighted: true },
-        { name: 'Agency', tagline: 'For agencies.', priceMonthlyMWK: 35000, priceYearlyMWK: 350000, features: ['Unlimited websites', 'Free SSL', 'Dedicated support'] }
+    hostingWordPress: [
+        { name: 'Starter', tagline: 'For a single WordPress site.', priceMonthlyMWK: 8000, priceYearlyMWK: 80000, features: ['1 WordPress website', '5GB SSD storage', 'Free SSL', '5 email accounts', 'Weekly backups', 'Standard support'] },
+        { name: 'Business', tagline: 'For businesses running a few WordPress sites.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['Up to 5 WordPress websites', '20GB SSD storage', 'Free SSL', '20 email accounts', 'Daily backups', 'Free migration', 'Priority support'], highlighted: true },
+        { name: 'Agency', tagline: 'For agencies managing many client sites.', priceMonthlyMWK: 35000, priceYearlyMWK: 350000, features: ['Unlimited WordPress websites', '50GB SSD storage', 'Free SSL', 'Unlimited email', 'Daily backups & malware scanning', 'Dedicated support'] }
     ],
-    hostingNote: 'Prices shown in Malawi Kwacha.',
+    hostingCpanel: [
+        { name: 'Starter', tagline: 'Full cPanel hosting for a single website.', priceMonthlyMWK: 6000, priceYearlyMWK: 60000, features: ['1 domain', '5GB SSD storage', 'Full cPanel access', 'Free SSL', '5 email accounts', 'Weekly backups', 'Standard support'] },
+        { name: 'Business', tagline: 'cPanel hosting for growing businesses.', priceMonthlyMWK: 15000, priceYearlyMWK: 150000, features: ['Up to 5 domains', '25GB SSD storage', 'Full cPanel access', 'Free SSL', '20 email accounts', 'Daily backups', 'Priority support'], highlighted: true },
+        { name: 'Agency', tagline: 'Full cPanel hosting with room to scale.', priceMonthlyMWK: 30000, priceYearlyMWK: 300000, features: ['Unlimited domains', '100GB SSD storage', 'Full cPanel access', 'Free SSL', 'Unlimited email', 'Daily backups & malware scanning', 'Dedicated support'] }
+    ],
+    hostingNote: 'Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans include free SSL and active uptime monitoring.',
     addons: [
-        { title: 'Domain Registration', desc: 'Registered and pointed to your site for you.' },
-        { title: 'Business Email', desc: 'Professional @yourdomain email addresses.' },
-        { title: 'E-commerce Setup', desc: 'WooCommerce store setup with local payment options.' },
-        { title: 'SEO & Speed Optimization', desc: 'Get found on Google and load fast.' }
+        { title: 'Domain Registration', desc: 'Registered and pointed to your site for you.', model: 'From MWK 25,000/year' },
+        { title: 'Business Email', desc: 'Professional @yourdomain email addresses.', model: 'From MWK 2,000/mo' },
+        { title: 'E-commerce Setup', desc: 'Full online store setup with local payment options.', model: 'One-time fee' },
+        { title: 'SEO & Speed Optimization', desc: 'Get found on Google and load fast.', model: 'One-time fee' }
     ],
     projects: [
         { tag: 'Web App', title: 'Project Name One', desc: 'A brief one-liner about what this app does and why it matters.', stack: ['React', 'Node.js', 'PostgreSQL'] }
     ],
     about: {
-        heading: 'A dev studio that also hosts what it builds.',
+        heading: 'Brandfletch Dev Studio',
         paragraphs: [
-            'Brandfletch Dev Studio designs and builds WordPress websites, then hosts them.',
-            'Because we are also a full software studio, we are not limited to WordPress.'
+            'Brandfletch Dev Studio is a Malawian software studio that designs, builds, and hosts websites and web applications. We build custom platforms from scratch — not templates — tailored to the specific needs of each business we work with.',
+            'Beyond custom development, we offer full web hosting with cPanel access and managed WordPress hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.',
+            'We have built and maintain a portfolio of platforms serving thousands of users across e-commerce, education, accounting, advertising, and communications. Every project we take on is built to scale.'
         ],
     },
     stats: [
         { num: '50+', label: 'Websites built' },
+        { num: '6', label: 'Platform products shipped' },
         { num: '99.9%', label: 'Uptime guarantee' },
         { num: '24/7', label: 'Support monitoring' }
     ],
+    capabilities: [
+        { title: 'Custom Web Development', desc: 'Custom websites and web applications from scratch.', items: ['React & Next.js', 'Node.js & Express', 'PostgreSQL & MongoDB', 'REST & WebSocket APIs'] },
+        { title: 'Web Hosting', desc: 'Full hosting with cPanel and managed WordPress.', items: ['WordPress hosting', 'Full cPanel hosting', 'Free SSL certificates', 'Daily backups & monitoring'] },
+        { title: 'Design & User Experience', desc: 'Fast, intuitive interfaces that work on any connection.', items: ['Responsive design', 'Mobile-first approach', 'Performance optimization', 'SEO foundations'] },
+        { title: 'Ongoing Support', desc: 'Security patches, updates, backups, and maintenance.', items: ['Security patches', 'Software updates', 'Daily backups', 'Dedicated support contact'] }
+    ],
+    industries: ['E-commerce', 'Education', 'Accounting & Finance', 'Advertising', 'Communications', 'Professional Services', 'Real Estate', 'Hospitality'],
+    aboutCta: { text: 'Want to see what we can build for you?', linkLabel: 'Start a Project' },
     contact: {
         heading: "Let's build your website.",
-        sub: "Tell us about your business — we'll design, build, and host your WordPress site.",
+        sub: "Tell us about your business — whether you need a custom build, WordPress hosting, cPanel hosting, or all of the above.",
         email: 'hello@brandfletch.dev',
     }
 };
-
-// --- Formatting helpers ---
 function formatMWK(amount) {
     if (amount === null || amount === undefined) return '';
     return 'MWK ' + Number(amount).toLocaleString('en-US');
@@ -122,6 +137,7 @@ function renderServices() {
     const services = siteContent.services || defaultContent.services;
     grid.innerHTML = services.map(s => `
         <div class="service-card reveal">
+            ${s.model ? `<span class="service-model">${s.model}</span>` : ''}
             <h3>${s.title || ''}</h3>
             <p>${s.desc || ''}</p>
         </div>
@@ -130,9 +146,12 @@ function renderServices() {
 
 // --- Render Hosting Packages ---
 function renderHosting() {
-    const grid = document.getElementById('pricingGrid');
-    const packages = siteContent.hostingPackages || defaultContent.hostingPackages;
-    grid.innerHTML = packages.map(p => `
+    const wpGrid = document.getElementById('wpPricingGrid');
+    const cpGrid = document.getElementById('cpanelPricingGrid');
+    const wpPackages = siteContent.hostingWordPress || defaultContent.hostingWordPress;
+    const cpPackages = siteContent.hostingCpanel || defaultContent.hostingCpanel;
+
+    const cardHTML = (p) => `
         <div class="pricing-card reveal ${p.highlighted ? 'pricing-card-highlight' : ''}">
             ${p.highlighted ? '<span class="pricing-badge">Most Popular</span>' : ''}
             <h3>${p.name || ''}</h3>
@@ -147,7 +166,10 @@ function renderHosting() {
             </ul>
             <a href="#contact" class="btn btn-ghost pricing-cta">Get Started</a>
         </div>
-    `).join('');
+    `;
+
+    if (wpGrid) wpGrid.innerHTML = wpPackages.map(cardHTML).join('');
+    if (cpGrid) cpGrid.innerHTML = cpPackages.map(cardHTML).join('');
 
     document.getElementById('hostingNote').textContent = siteContent.hostingNote || defaultContent.hostingNote || '';
 }
@@ -158,6 +180,7 @@ function renderAddons() {
     const addons = siteContent.addons || defaultContent.addons;
     grid.innerHTML = addons.map(a => `
         <div class="addon-card reveal">
+            ${a.model ? `<span class="service-model">${a.model}</span>` : ''}
             <h3>${a.title || ''}</h3>
             <p>${a.desc || ''}</p>
         </div>
@@ -170,8 +193,10 @@ function renderAbout() {
     document.getElementById('aboutHeading').textContent = about.heading || '';
     const p1 = document.getElementById('aboutP1');
     const p2 = document.getElementById('aboutP2');
+    const p3 = document.getElementById('aboutP3');
     if (p1) p1.textContent = (about.paragraphs && about.paragraphs[0]) || '';
     if (p2) p2.textContent = (about.paragraphs && about.paragraphs[1]) || '';
+    if (p3) p3.textContent = (about.paragraphs && about.paragraphs[2]) || '';
 
     const statsWrap = document.getElementById('aboutStats');
     const stats = siteContent.stats || defaultContent.stats;
@@ -181,6 +206,35 @@ function renderAbout() {
             <span class="stat-label">${s.label || ''}</span>
         </div>
     `).join('');
+
+    // Render capabilities grid
+    const capGrid = document.getElementById('aboutCapabilities');
+    const capabilities = siteContent.capabilities || defaultContent.capabilities;
+    if (capGrid && capabilities) {
+        capGrid.innerHTML = capabilities.map(c => `
+            <div class="capability-card reveal">
+                <h3>${c.title || ''}</h3>
+                <p>${c.desc || ''}</p>
+                <ul class="capability-items">
+                    ${(c.items || []).map(i => `<li>${i}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('');
+    }
+
+    // Render industries
+    const indTags = document.getElementById('industryTags');
+    const industries = siteContent.industries || defaultContent.industries;
+    if (indTags && industries) {
+        indTags.innerHTML = industries.map(i => `<span>${i}</span>`).join('');
+    }
+
+    // Render CTA
+    const cta = siteContent.aboutCta || defaultContent.aboutCta;
+    const ctaText = document.getElementById('aboutCtaText');
+    const ctaLink = document.getElementById('aboutCtaLink');
+    if (ctaText && cta.text) ctaText.textContent = cta.text;
+    if (ctaLink && cta.linkLabel) ctaLink.textContent = cta.linkLabel;
 }
 
 // --- Render Contact ---

@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Brandfletch Dev Studio builds WordPress websites and hosts them on reliable infrastructure — billed simply in Malawi Kwacha.">
-    <meta name="keywords" content="WordPress website Malawi, web hosting Malawi, WordPress hosting MWK, website design Malawi, managed WordPress hosting, Brandfletch">
+    <meta name="description" content="Brandfletch Dev Studio builds custom websites and web apps, plus WordPress and cPanel hosting — billed in Malawi Kwacha.">
+    <meta name="keywords" content="custom website Malawi, web hosting Malawi, WordPress hosting MWK, cPanel hosting MWK, web development Malawi, website design Malawi, Brandfletch">
     <meta name="author" content="Brandfletch Dev Studio">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#0a0a0f">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Brandfletch Dev Studio — WordPress Websites, Built and Hosted.">
-    <meta property="og:description" content="We design and build your WordPress website, then host it on reliable infrastructure — billed in Malawi Kwacha.">
+    <meta property="og:title" content="Brandfletch Dev Studio — Custom Websites, Built and Hosted.">
+    <meta property="og:description" content="Custom websites, web apps, WordPress and cPanel hosting — built and hosted in Malawi Kwacha.">
     <meta property="og:url" content="https://brandfletch-studio.vercel.app/">
     <meta property="og:site_name" content="Brandfletch Dev Studio">
     <meta property="og:image" content="https://brandfletch-studio.vercel.app/assets/og-image.png">
@@ -20,7 +20,7 @@
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Brandfletch Dev Studio">
-    <meta name="twitter:description" content="We design and build your WordPress website, then host it on reliable infrastructure — billed in Malawi Kwacha.">
+    <meta name="twitter:description" content="Custom websites, web apps, WordPress and cPanel hosting — built and hosted in Malawi Kwacha.">
     <meta name="twitter:image" content="https://brandfletch-studio.vercel.app/assets/og-image.png">
 
     <!-- Canonical -->
@@ -33,13 +33,13 @@
       "@type": "Organization",
       "name": "Brandfletch Dev Studio",
       "url": "https://brandfletch-studio.vercel.app/",
-      "description": "We design and build WordPress websites and host them on reliable managed infrastructure, billed in Malawi Kwacha.",
+      "description": "We build custom websites and web applications, plus offer WordPress and cPanel hosting — billed in Malawi Kwacha.",
       "sameAs": [
       ]
     }
     </script>
 
-    <title>Brandfletch Dev Studio — WordPress Websites, Built and Hosted.</title>
+    <title>Brandfletch Dev Studio — Custom Websites, Built and Hosted.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -71,8 +71,8 @@
     <header id="hero">
         <div class="hero-content">
             <p class="hero-tag" id="heroTag">Brandfletch Dev Studio</p>
-            <h1 id="heroHeading">We build <span class="accent">WordPress websites</span><br>and host them right.</h1>
-            <p class="hero-sub" id="heroSub">Tell us what you need, we design and build your WordPress site, then keep it fast, secure, and online — with hosting billed simply in Malawi Kwacha.</p>
+            <h1 id="heroHeading">We build <span class="accent">custom websites</span><br>and host them right.</h1>
+            <p class="hero-sub" id="heroSub">From custom web apps to WordPress and cPanel hosting — we design, build, and host everything your business needs online. Billed in Malawi Kwacha.</p>
             <div class="hero-actions">
                 <a href="#hosting" class="btn btn-primary" id="heroCtaPrimary">See Hosting Plans</a>
                 <a href="#contact" class="btn btn-ghost" id="heroCtaSecondary">Start a Project</a>
@@ -84,16 +84,18 @@
     <!-- MARQUEE -->
     <div class="marquee" aria-hidden="true">
         <div class="marquee-track">
-            <span>WordPress Design</span><span>•</span>
-            <span>Hosting</span><span>•</span>
-            <span>Migrations</span><span>•</span>
-            <span>Maintenance</span><span>•</span>
-            <span>Support</span><span>•</span>
-            <span>WordPress Design</span><span>•</span>
-            <span>Hosting</span><span>•</span>
-            <span>Migrations</span><span>•</span>
-            <span>Maintenance</span><span>•</span>
-            <span>Support</span><span>•</span>
+            <span>Custom Development</span><span>&middot;</span>
+            <span>WordPress Hosting</span><span>&middot;</span>
+            <span>cPanel Hosting</span><span>&middot;</span>
+            <span>Migrations</span><span>&middot;</span>
+            <span>Maintenance</span><span>&middot;</span>
+            <span>Support</span><span>&middot;</span>
+            <span>Custom Development</span><span>&middot;</span>
+            <span>WordPress Hosting</span><span>&middot;</span>
+            <span>cPanel Hosting</span><span>&middot;</span>
+            <span>Migrations</span><span>&middot;</span>
+            <span>Maintenance</span><span>&middot;</span>
+            <span>Support</span><span>&middot;</span>
         </div>
     </div>
 
@@ -114,8 +116,13 @@
             <p class="section-label">/ Hosting</p>
             <h2>Hosting packages.</h2>
         </div>
-        <div class="pricing-grid" id="pricingGrid">
-            <!-- Packages loaded via JS -->
+        <div class="hosting-group">
+            <h3 class="hosting-group-title">WordPress Hosting</h3>
+            <div class="pricing-grid" id="wpPricingGrid"></div>
+        </div>
+        <div class="hosting-group">
+            <h3 class="hosting-group-title">cPanel Hosting</h3>
+            <div class="pricing-grid" id="cpanelPricingGrid"></div>
         </div>
         <p class="hosting-note" id="hostingNote"></p>
     </section>
@@ -144,16 +151,40 @@
 
     <!-- ABOUT -->
     <section id="about">
+        <div class="section-head">
+            <p class="section-label">/ About</p>
+            <h2>Company profile.</h2>
+        </div>
         <div class="about-wrap">
             <div class="about-text">
-                <p class="section-label">/ About</p>
-                <h2 id="aboutHeading">A dev studio that also hosts what it builds.</h2>
-                <p id="aboutP1">Brandfletch Dev Studio designs and builds WordPress websites, then hosts them — one team, one bill, in Malawi Kwacha.</p>
-                <p id="aboutP2">Because we're also a full software studio, we're not limited to WordPress. If your business outgrows it, we can build the custom app or system you need next.</p>
+                <h3 id="aboutHeading">Brandfletch Dev Studio</h3>
+                <p id="aboutP1">Brandfletch Dev Studio is a Malawian software studio that designs, builds, and hosts websites and web applications. We build custom platforms from scratch — not templates — tailored to the specific needs of each business we work with.</p>
+                <p id="aboutP2">Beyond custom development, we offer full web hosting with cPanel access and managed WordPress hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.</p>
+                <p id="aboutP3">We have built and maintain a portfolio of platforms serving thousands of users across e-commerce, education, accounting, advertising, and communications. Every project we take on is built to scale — starting with a clean codebase and growing into whatever the business needs next.</p>
             </div>
             <div class="about-stats" id="aboutStats">
                 <!-- Stats loaded via JS -->
             </div>
+        </div>
+        <div class="about-profile-grid" id="aboutCapabilities">
+            <!-- Capabilities loaded via JS -->
+        </div>
+        <div class="about-industries">
+            <p class="section-label">/ Industries we serve</p>
+            <div class="industry-tags" id="industryTags">
+                <span>E-commerce</span>
+                <span>Education</span>
+                <span>Accounting & Finance</span>
+                <span>Advertising</span>
+                <span>Communications</span>
+                <span>Professional Services</span>
+                <span>Real Estate</span>
+                <span>Hospitality</span>
+            </div>
+        </div>
+        <div class="about-cta">
+            <p id="aboutCtaText">Want to see what we can build for you?</p>
+            <a href="#contact" class="btn btn-primary" id="aboutCtaLink">Start a Project</a>
         </div>
     </section>
 
@@ -162,7 +193,7 @@
         <div class="contact-wrap">
             <p class="section-label">/ Contact</p>
             <h2 id="contactHeading">Let's build your website.</h2>
-            <p class="contact-sub" id="contactSub">Tell us about your business — we'll design, build, and host your WordPress site from start to finish.</p>
+            <p class="contact-sub" id="contactSub">Tell us about your business — whether you need a custom build, WordPress hosting, cPanel hosting, or all of the above.</p>
             <form id="contactForm" class="contact-form">
                 <div class="form-row">
                     <input type="text" name="name" placeholder="Your name" required autocomplete="name">
@@ -187,7 +218,7 @@
         <div class="footer-inner">
             <span>Brandfletch Dev Studio</span>
             <span class="footer-sep">&middot;</span>
-            <span>WordPress websites, built and hosted.</span>
+            <span>Custom websites, built and hosted.</span>
         </div>
     </footer>
 

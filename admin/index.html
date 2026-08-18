@@ -139,6 +139,8 @@
                     <textarea id="aboutP1" rows="3"></textarea>
                     <label>Paragraph 2</label>
                     <textarea id="aboutP2" rows="3"></textarea>
+                    <label>Paragraph 3</label>
+                    <textarea id="aboutP3" rows="3"></textarea>
                     <h3 class="form-section">Stats</h3>
                     <div class="stats-editor" id="statsEditor"></div>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -166,6 +168,8 @@
                 <input type="text" id="serviceTitle" required>
                 <label>Description</label>
                 <textarea id="serviceDesc" rows="3"></textarea>
+                <label>Revenue Model</label>
+                <input type="text" id="serviceModel" placeholder="Project-based, From MWK 8,000/mo, One-time fee...">
                 <div class="modal-actions">
                     <button type="button" class="btn btn-ghost" onclick="closeServiceModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -180,6 +184,11 @@
             <h2 id="hostingModalTitle">Add Package</h2>
             <form id="hostingForm">
                 <input type="hidden" id="hostingId">
+                <label>Category</label>
+                <select id="hostingCategory">
+                    <option value="wordpress">WordPress Hosting</option>
+                    <option value="cpanel">cPanel Hosting</option>
+                </select>
                 <label>Name</label>
                 <input type="text" id="hostingName" placeholder="Starter, Business, Agency..." required>
                 <label>Tagline</label>
@@ -212,6 +221,8 @@
                 <input type="text" id="addonTitle" required>
                 <label>Description</label>
                 <textarea id="addonDesc" rows="3"></textarea>
+                <label>Revenue Model</label>
+                <input type="text" id="addonModel" placeholder="From MWK 25,000/year, One-time fee...">
                 <div class="modal-actions">
                     <button type="button" class="btn btn-ghost" onclick="closeAddonModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>

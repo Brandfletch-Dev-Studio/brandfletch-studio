@@ -2,9 +2,9 @@
   "hero": {
     "tag": "Brandfletch Dev Studio",
     "headingPre": "We build",
-    "headingAccent": "WordPress websites",
+    "headingAccent": "custom websites",
     "headingPost": "and host them right.",
-    "sub": "Tell us what you need, we design and build your WordPress site, then keep it fast, secure, and online — with hosting billed simply in Malawi Kwacha.",
+    "sub": "From custom web apps to WordPress and cPanel hosting — we design, build, and host everything your business needs online. Billed in Malawi Kwacha.",
     "ctaPrimaryLabel": "See Hosting Plans",
     "ctaPrimaryHref": "#hosting",
     "ctaSecondaryLabel": "Start a Project",
@@ -13,30 +13,46 @@
   "services": [
     {
       "id": "s1",
-      "title": "WordPress Website Design & Build",
-      "desc": "A custom-designed WordPress site built around your business — from simple brochure sites to full booking and e-commerce builds."
+      "title": "Custom Website Development",
+      "desc": "Custom-designed and built from scratch. No templates, no bloated plugins — just clean code tailored to your business.",
+      "model": "Project-based"
     },
     {
       "id": "s2",
-      "title": "Website Migration",
-      "desc": "Already have a site elsewhere? We move it to our hosting with zero downtime and no lost content."
+      "title": "WordPress Hosting",
+      "desc": "Managed WordPress hosting with automatic updates, daily backups, and active security monitoring.",
+      "model": "From MWK 8,000/mo"
     },
     {
       "id": "s3",
-      "title": "Care & Maintenance Plans",
-      "desc": "Ongoing updates, security patches, and backups. Your site stays current and protected without you lifting a finger."
+      "title": "Full cPanel Hosting",
+      "desc": "Complete web hosting with cPanel access. Host any platform — WordPress, Joomla, custom, or anything else.",
+      "model": "From MWK 6,000/mo"
     },
     {
       "id": "s4",
-      "title": "Custom Web Apps & Automations",
-      "desc": "Outgrown WordPress? As a full dev studio, we can build the custom app, API, or automation your business needs next."
+      "title": "Care & Maintenance",
+      "desc": "Ongoing security patches, updates, and daily backups. Your site stays current and protected without you lifting a finger.",
+      "model": "From MWK 10,000/mo"
+    },
+    {
+      "id": "s5",
+      "title": "Website Migration",
+      "desc": "Already hosted elsewhere? We move your site to our hosting with zero downtime and no lost content.",
+      "model": "One-time fee"
+    },
+    {
+      "id": "s6",
+      "title": "Custom Web Apps & Systems",
+      "desc": "Outgrown your current setup? As a full software studio, we build the custom app, API, or platform your business needs next.",
+      "model": "Project-based"
     }
   ],
-  "hostingPackages": [
+  "hostingWordPress": [
     {
-      "id": "h1",
+      "id": "wp1",
       "name": "Starter",
-      "tagline": "For a single site that just needs to be online and fast.",
+      "tagline": "For a single WordPress site that needs to be online and fast.",
       "priceMonthlyMWK": 8000,
       "priceYearlyMWK": 80000,
       "features": [
@@ -50,9 +66,9 @@
       "highlighted": false
     },
     {
-      "id": "h2",
+      "id": "wp2",
       "name": "Business",
-      "tagline": "For businesses running a few sites that need to stay online.",
+      "tagline": "For businesses running a few WordPress sites.",
       "priceMonthlyMWK": 18000,
       "priceYearlyMWK": 180000,
       "features": [
@@ -67,9 +83,9 @@
       "highlighted": true
     },
     {
-      "id": "h3",
+      "id": "wp3",
       "name": "Agency",
-      "tagline": "For agencies and businesses managing many client sites.",
+      "tagline": "For agencies managing many client sites.",
       "priceMonthlyMWK": 35000,
       "priceYearlyMWK": 350000,
       "features": [
@@ -78,33 +94,89 @@
         "Free SSL certificates",
         "Unlimited email accounts",
         "Daily backups & malware scanning",
-        "Dedicated support contact",
-        "White-label option for reselling"
+        "Dedicated support contact"
       ],
       "highlighted": false
     }
   ],
-  "hostingNote": "Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans run on reliable, managed infrastructure with active uptime monitoring.",
+  "hostingCpanel": [
+    {
+      "id": "cp1",
+      "name": "Starter",
+      "tagline": "Full cPanel hosting for a single website.",
+      "priceMonthlyMWK": 6000,
+      "priceYearlyMWK": 60000,
+      "features": [
+        "1 domain",
+        "5GB SSD storage",
+        "Full cPanel access",
+        "Free SSL certificate",
+        "5 professional email accounts",
+        "Weekly backups",
+        "Standard support"
+      ],
+      "highlighted": false
+    },
+    {
+      "id": "cp2",
+      "name": "Business",
+      "tagline": "cPanel hosting for growing businesses.",
+      "priceMonthlyMWK": 15000,
+      "priceYearlyMWK": 150000,
+      "features": [
+        "Up to 5 domains",
+        "25GB SSD storage",
+        "Full cPanel access",
+        "Free SSL certificate",
+        "20 professional email accounts",
+        "Daily backups",
+        "Priority support"
+      ],
+      "highlighted": true
+    },
+    {
+      "id": "cp3",
+      "name": "Agency",
+      "tagline": "Full cPanel hosting with room to scale.",
+      "priceMonthlyMWK": 30000,
+      "priceYearlyMWK": 300000,
+      "features": [
+        "Unlimited domains",
+        "100GB SSD storage",
+        "Full cPanel access",
+        "Free SSL certificates",
+        "Unlimited email accounts",
+        "Daily backups & malware scanning",
+        "Dedicated support contact"
+      ],
+      "highlighted": false
+    }
+  ],
+  "hostingNote": "Prices shown in Malawi Kwacha. Pay yearly and get roughly 2 months free versus paying monthly. All plans include free SSL and active uptime monitoring.",
   "addons": [
     {
       "id": "a1",
       "title": "Domain Registration",
-      "desc": ".com, .mw, and most other extensions — registered and pointed to your site for you."
+      "desc": ".com, .mw, and most other extensions — registered and pointed to your site for you.",
+      "model": "From MWK 25,000/year"
     },
     {
       "id": "a2",
       "title": "Business Email",
-      "desc": "Professional @yourdomain email addresses, set up and ready to use on your phone and computer."
+      "desc": "Professional @yourdomain email addresses, set up and ready to use on your phone and computer.",
+      "model": "From MWK 2,000/mo"
     },
     {
       "id": "a3",
       "title": "E-commerce Setup",
-      "desc": "WooCommerce store setup with mobile money and card payment options configured for you."
+      "desc": "Full online store setup with mobile money and card payment options configured for your business.",
+      "model": "One-time fee"
     },
     {
       "id": "a4",
       "title": "SEO & Speed Optimization",
-      "desc": "Get found on Google and load fast for visitors, even on slower connections."
+      "desc": "Get found on Google and load fast for visitors, even on slower connections.",
+      "model": "One-time fee"
     }
   ],
   "projects": [
@@ -118,79 +190,90 @@
         "Node.js",
         "PostgreSQL"
       ],
-      "link": "https://akonzi-sofa-furniture.vercel.app"
+      "link": "https://akonzi-sofa-furniture.vercel.app",
+      "featured": true
     },
     {
       "id": "p2",
       "title": "Brandfledger",
       "tag": "Web App",
-      "desc": "Smart accounting software for service businesses ",
+      "desc": "Smart accounting software for service businesses.",
       "stack": [
         "Python",
         "Redis",
         "Docker"
       ],
-      "link": "https://brandfledger-three.vercel.app"
+      "link": "https://brandfledger-three.vercel.app",
+      "featured": true
     },
     {
       "id": "p3",
-      "title": "The Chibondo Academy ",
+      "title": "The Chibondo Academy",
       "tag": "Web App",
-      "desc": "An online learning platform for MSCE students in Malawi ",
+      "desc": "An online learning platform for MSCE students in Malawi.",
       "stack": [
         "TypeScript",
         "Express",
         "MongoDB"
       ],
-      "link": "https://chibondoacademy.com"
+      "link": "https://chibondoacademy.com",
+      "featured": true
     },
     {
       "id": "p4",
       "title": "Nyasadesk",
-      "tag": "Team inbox saas",
-      "desc": "Team Inbox software for sales teams",
+      "tag": "SaaS",
+      "desc": "Team inbox software for sales teams.",
       "stack": [
         "React Native",
         "Firebase"
       ],
-      "link": "https://nyasadesk.com"
+      "link": "https://nyasadesk.com",
+      "featured": true
     },
     {
       "id": "p5",
-      "title": "Brandfletch Ads Platform ",
-      "tag": "Ads Platform ",
-      "desc": "Online ads ordering for businesses looking to reach new audiences ",
+      "title": "Brandfletch Ads Platform",
+      "tag": "Ads Platform",
+      "desc": "Online ads ordering for businesses looking to reach new audiences.",
       "stack": [
         "Go",
         "CLI",
         "OSS"
       ],
-      "link": "https://ads.brandfletch.com"
+      "link": "https://ads.brandfletch.com",
+      "featured": true
     },
     {
       "id": "p6",
-      "title": "Brandfletch Business Academy ",
-      "tag": "Online school",
-      "desc": "Online learning management system, featuring business courses for entrepreneurs looking to scale their businesses",
+      "title": "Brandfletch Business Academy",
+      "tag": "Online School",
+      "desc": "Online learning management system featuring business courses for entrepreneurs looking to scale.",
       "stack": [
         "Next.js",
         "WebSocket",
         "Redis"
       ],
-      "link": "https://edu.brandfletch.com"
+      "link": "https://edu.brandfletch.com",
+      "featured": true
     }
   ],
   "about": {
-    "heading": "A dev studio that also hosts what it builds.",
+    "heading": "Brandfletch Dev Studio",
     "paragraphs": [
-      "Brandfletch Dev Studio designs and builds WordPress websites, then hosts them — one team, one bill, in Malawi Kwacha.",
-      "Because we're also a full software studio, we're not limited to WordPress. If your business outgrows it, we can build the custom app or system you need next."
+      "Brandfletch Dev Studio is a Malawian software studio that designs, builds, and hosts websites and web applications. We build custom platforms from scratch — not templates — tailored to the specific needs of each business we work with.",
+      "Beyond custom development, we offer full web hosting with cPanel access and managed WordPress hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.",
+      "We have built and maintain a portfolio of platforms serving thousands of users across e-commerce, education, accounting, advertising, and communications. Every project we take on is built to scale — starting with a clean codebase and growing into whatever the business needs next."
     ]
   },
   "stats": [
     {
       "num": "50+",
       "label": "Websites built"
+    },
+    {
+      "num": "6",
+      "label": "Platform products shipped"
     },
     {
       "num": "99.9%",
@@ -203,8 +286,64 @@
   ],
   "contact": {
     "heading": "Let's build your website.",
-    "sub": "Tell us about your business — we'll design, build, and host your WordPress site from start to finish.",
+    "sub": "Tell us about your business — whether you need a custom build, WordPress hosting, cPanel hosting, or all of the above.",
     "email": "hello@brandfletch.dev"
   },
-  "messages": []
+  "messages": [],
+  "capabilities": [
+    {
+      "title": "Custom Web Development",
+      "desc": "We design and build custom websites and web applications from scratch. No templates, no bloated plugins — just clean, maintainable code tailored to your business.",
+      "items": [
+        "React & Next.js",
+        "Node.js & Express",
+        "PostgreSQL & MongoDB",
+        "REST & WebSocket APIs"
+      ]
+    },
+    {
+      "title": "Web Hosting",
+      "desc": "Full hosting infrastructure with cPanel access and managed WordPress options. Free SSL, daily backups, and active uptime monitoring on every plan.",
+      "items": [
+        "WordPress hosting",
+        "Full cPanel hosting",
+        "Free SSL certificates",
+        "Daily backups & monitoring"
+      ]
+    },
+    {
+      "title": "Design & User Experience",
+      "desc": "Every project starts with understanding your users. We design interfaces that are fast, intuitive, and work well even on slower connections.",
+      "items": [
+        "Responsive design",
+        "Mobile-first approach",
+        "Performance optimization",
+        "SEO foundations"
+      ]
+    },
+    {
+      "title": "Ongoing Support",
+      "desc": "We do not disappear after launch. Security patches, updates, backups, and maintenance are handled by us so your platform stays current and protected.",
+      "items": [
+        "Security patches",
+        "Software updates",
+        "Daily backups",
+        "Dedicated support contact"
+      ]
+    }
+  ],
+  "industries": [
+    "E-commerce",
+    "Education",
+    "Accounting & Finance",
+    "Advertising",
+    "Communications",
+    "Professional Services",
+    "Real Estate",
+    "Hospitality"
+  ],
+  "aboutCta": {
+    "text": "Want to see what we can build for you?",
+    "linkLabel": "Start a Project"
+  }
 }

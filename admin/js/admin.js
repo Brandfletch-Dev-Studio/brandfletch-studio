@@ -148,7 +148,9 @@ function renderAll() {
 function renderOverview() {
     document.getElementById('statProjects').textContent = content.projects?.length || 0;
     document.getElementById('statServices').textContent = content.services?.length || 0;
-    document.getElementById('statHosting').textContent = content.hostingPackages?.length || 0;
+    const wpCount = (content.hostingWordPress || []).length;
+    const cpCount = (content.hostingCpanel || []).length;
+    document.getElementById('statHosting').textContent = wpCount + cpCount;
     const unread = (content.messages || []).filter(m => !m.read).length;
     document.getElementById('statMessages').textContent = unread;
 
@@ -211,6 +213,7 @@ function renderServices() {
         <div class="data-item">
             <div class="data-item-main">
                 <h3>${escape(s.title)}</h3>
+                ${s.model ? `<span class="data-item-tag">${escape(s.model)}</span>` : ''}
                 <p>${escape(s.desc)}</p>
             </div>
             <div class="data-item-actions">
@@ -223,26 +226,31 @@ function renderServices() {
 
 function renderHosting() {
     const list = document.getElementById('hostingList');
-    const packages = content.hostingPackages || [];
     document.getElementById('hostingNoteInput').value = content.hostingNote || '';
-    if (packages.length === 0) {
+    const wp = content.hostingWordPress || [];
+    const cp = content.hostingCpanel || [];
+    if (wp.length === 0 && cp.length === 0) {
         list.innerHTML = '<p class="muted">No hosting packages yet.</p>';
         return;
     }
-    list.innerHTML = packages.map(p => `
-        <div class="data-item">
-            <div class="data-item-main">
-                <span class="data-item-tag">${formatMWK(p.priceMonthlyMWK)}/mo${p.highlighted ? " &middot; <span class='featured-badge'>Highlighted</span>" : ''}</span>
-                <h3>${escape(p.name)}</h3>
-                <p>${escape(p.tagline)}</p>
-                <div class="data-stack">${(p.features || []).map(f => `<span>${escape(f)}</span>`).join('')}</div>
+    const renderGroup = (label, packages) => {
+        if (!packages.length) return '';
+        return `<h3 class="hosting-group-label">${label}</h3>` + packages.map(p => `
+            <div class="data-item">
+                <div class="data-item-main">
+                    <span class="data-item-tag">${formatMWK(p.priceMonthlyMWK)}/mo${p.highlighted ? " &middot; <span class='featured-badge'>Highlighted</span>" : ''}</span>
+                    <h3>${escape(p.name)}</h3>
+                    <p>${escape(p.tagline)}</p>
+                    <div class="data-stack">${(p.features || []).map(f => `<span>${escape(f)}</span>`).join('')}</div>
+                </div>
+                <div class="data-item-actions">
+                    <button class="btn btn-ghost" onclick="openHostingEditor('${p.id}')">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteHosting('${p.id}')">Delete</button>
+                </div>
             </div>
-            <div class="data-item-actions">
-                <button class="btn btn-ghost" onclick="openHostingEditor('${p.id}')">Edit</button>
-                <button class="btn btn-danger" onclick="deleteHosting('${p.id}')">Delete</button>
-            </div>
-        </div>
-    `).join('');
+        `).join('');
+    };
+    list.innerHTML = renderGroup('WordPress Hosting', wp) + renderGroup('cPanel Hosting', cp);
 }
 
 function renderAddons() {
@@ -256,6 +264,7 @@ function renderAddons() {
         <div class="data-item">
             <div class="data-item-main">
                 <h3>${escape(a.title)}</h3>
+                ${a.model ? `<span class="data-item-tag">${escape(a.model)}</span>` : ''}
                 <p>${escape(a.desc)}</p>
             </div>
             <div class="data-item-actions">
@@ -436,7 +445,8 @@ function openHostingEditor(id) {
     form.reset();
 
     if (id) {
-        const p = content.hostingPackages.find(x => x.id === id);
+        const all = [...(content.hostingWordPress || []), ...(content.hostingCpanel || [])];
+        const p = all.find(x => x.id === id);
         if (!p) return;
         document.getElementById('hostingModalTitle').textContent = 'Edit Package';
         document.getElementById('hostingId').value = p.id;
@@ -446,6 +456,7 @@ function openHostingEditor(id) {
         document.getElementById('hostingPriceYearly').value = p.priceYearlyMWK;
         document.getElementById('hostingFeatures').value = (p.features || []).join('\n');
         document.getElementById('hostingHighlighted').checked = !!p.highlighted;
+        document.getElementById('hostingCategory').value = (content.hostingCpanel || []).some(x => x.id === id) ? 'cpanel' : 'wordpress';
     } else {
         document.getElementById('hostingModalTitle').textContent = 'Add Package';
         document.getElementById('hostingId').value = '';
@@ -460,6 +471,8 @@ function closeHostingModal() {
 
 async function saveHosting() {
     const id = document.getElementById('hostingId').value;
+    const category = document.getElementById('hostingCategory').value;
+    const key = category === 'cpanel' ? 'hostingCpanel' : 'hostingWordPress';
     const pkg = {
         id: id || 'h' + Date.now(),
         name: document.getElementById('hostingName').value,
@@ -470,14 +483,15 @@ async function saveHosting() {
         highlighted: document.getElementById('hostingHighlighted').checked
     };
 
-    if (!content.hostingPackages) content.hostingPackages = [];
+    if (!content[key]) content[key] = [];
 
+    // Remove from old array if editing (might have switched category)
     if (id) {
-        const idx = content.hostingPackages.findIndex(p => p.id === id);
-        if (idx >= 0) content.hostingPackages[idx] = pkg;
-    } else {
-        content.hostingPackages.push(pkg);
+        if (content.hostingWordPress) content.hostingWordPress = content.hostingWordPress.filter(p => p.id !== id);
+        if (content.hostingCpanel) content.hostingCpanel = content.hostingCpanel.filter(p => p.id !== id);
     }
+
+    content[key].push(pkg);
 
     await saveContent();
     closeHostingModal();
@@ -487,7 +501,8 @@ async function saveHosting() {
 
 async function deleteHosting(id) {
     if (!confirm('Delete this hosting package?')) return;
-    content.hostingPackages = content.hostingPackages.filter(p => p.id !== id);
+    if (content.hostingWordPress) content.hostingWordPress = content.hostingWordPress.filter(p => p.id !== id);
+    if (content.hostingCpanel) content.hostingCpanel = content.hostingCpanel.filter(p => p.id !== id);
     await saveContent();
     renderHosting();
     renderOverview();
