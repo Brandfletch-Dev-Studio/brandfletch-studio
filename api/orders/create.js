@@ -9,9 +9,6 @@ const MWK_PER_USD = 6000;
 const DOMAIN_MARKUP = 1.15;
 
 const PLANS = {
-    'wordpress-starter':    { name: 'WordPress Starter',  priceMonthly: 30000,  priceYearly: 300000,  whmPlan: 'wp_starter',    type: 'wordpress' },
-    'wordpress-business':   { name: 'WordPress Business', priceMonthly: 60000,  priceYearly: 600000,  whmPlan: 'wp_business',   type: 'wordpress' },
-    'wordpress-agency':     { name: 'WordPress Agency',   priceMonthly: 120000, priceYearly: 1200000, whmPlan: 'wp_agency',     type: 'wordpress' },
     'cpanel-starter':       { name: 'cPanel Starter',    priceMonthly: 18000,  priceYearly: 180000,  whmPlan: 'cp_starter',    type: 'cpanel' },
     'cpanel-business':      { name: 'cPanel Business',   priceMonthly: 36000,  priceYearly: 360000,  whmPlan: 'cp_business',   type: 'cpanel' },
     'cpanel-agency':        { name: 'cPanel Agency',     priceMonthly: 72000,  priceYearly: 720000,  whmPlan: 'cp_agency',     type: 'cpanel' }

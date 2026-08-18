@@ -4,7 +4,7 @@
     "headingPre": "We build",
     "headingAccent": "custom websites",
     "headingPost": "and host them right.",
-    "sub": "From custom web apps to WordPress and cPanel hosting — we design, build, and host everything your business needs online. Billed in Malawi Kwacha.",
+    "sub": "From custom web apps to cPanel web hosting — we design, build, and host everything your business needs online. Billed in Malawi Kwacha.",
     "ctaPrimaryLabel": "See Hosting Plans",
     "ctaPrimaryHref": "#hosting",
     "ctaSecondaryLabel": "Start a Project",
@@ -19,8 +19,8 @@
     },
     {
       "id": "s2",
-      "title": "WordPress Hosting",
-      "desc": "Managed WordPress hosting with automatic updates, daily backups, and active security monitoring.",
+      "title": "Managed Web Hosting",
+      "desc": "Managed web hosting with automatic updates, daily backups, and active security monitoring.",
       "model": "From MWK 30,000/mo"
     },
     {
@@ -48,61 +48,6 @@
       "model": "Project-based"
     }
   ],
-  "hostingWordPress": [
-    {
-      "name": "Starter",
-      "tagline": "Managed WordPress for a single site — great for a first business website.",
-      "priceMonthlyMWK": 30000,
-      "priceYearlyMWK": 300000,
-      "features": [
-        "3 WordPress websites",
-        "20GB NVMe SSD storage",
-        "Free SSL certificate",
-        "Free CDN",
-        "2 mailboxes per website",
-        "Weekly automatic backups",
-        "Automatic WordPress updates",
-        "Standard support"
-      ]
-    },
-    {
-      "name": "Business",
-      "tagline": "Managed WordPress for businesses running multiple sites, with daily backups and priority support.",
-      "priceMonthlyMWK": 60000,
-      "priceYearlyMWK": 600000,
-      "features": [
-        "Unlimited WordPress websites",
-        "50GB NVMe SSD storage",
-        "Free SSL certificate",
-        "Free CDN",
-        "Unlimited mailboxes",
-        "Daily automatic backups",
-        "Automatic WordPress updates",
-        "Free staging environment",
-        "Free site migration",
-        "Priority support"
-      ],
-      "highlighted": true
-    },
-    {
-      "name": "Agency",
-      "tagline": "Dedicated resources for agencies and high-traffic client sites.",
-      "priceMonthlyMWK": 120000,
-      "priceYearlyMWK": 1200000,
-      "features": [
-        "Unlimited WordPress websites",
-        "100GB NVMe SSD storage",
-        "Free SSL certificate",
-        "Free CDN",
-        "Unlimited mailboxes",
-        "Daily + on-demand backups",
-        "Automatic WordPress updates",
-        "Free staging environment",
-        "Free malware scanning & removal",
-        "Dedicated support"
-      ]
-    }
-  ],
   "hostingCpanel": [
     {
       "name": "Starter",
@@ -110,7 +55,7 @@
       "priceMonthlyMWK": 18000,
       "priceYearlyMWK": 180000,
       "features": [
-        "1 website",
+        "Unlimited websites",
         "20GB NVMe SSD storage",
         "Full cPanel access",
         "Free SSL certificate",
@@ -125,7 +70,7 @@
       "priceMonthlyMWK": 36000,
       "priceYearlyMWK": 360000,
       "features": [
-        "Up to 10 websites",
+        "Unlimited websites",
         "50GB NVMe SSD storage",
         "Full cPanel access",
         "Free SSL certificate",
@@ -263,7 +208,7 @@
     "heading": "Brandfletch Dev Studio",
     "paragraphs": [
       "Brandfletch Dev Studio is a Malawian software studio that designs, builds, and hosts websites and web applications. We build custom platforms from scratch — not templates — tailored to the specific needs of each business we work with.",
-      "Beyond custom development, we offer full web hosting with cPanel access and managed WordPress hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.",
+      "Beyond custom development, we offer full web hosting with cPanel access and managed web hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.",
       "We have built and maintain a portfolio of platforms serving thousands of users across e-commerce, education, accounting, advertising, and communications. Every project we take on is built to scale — starting with a clean codebase and growing into whatever the business needs next."
     ]
   },
@@ -287,7 +232,7 @@
   ],
   "contact": {
     "heading": "Let's build your website.",
-    "sub": "Tell us about your business — whether you need a custom build, WordPress hosting, cPanel hosting, or all of the above.",
+    "sub": "Tell us about your business — whether you need a custom build, cPanel web hosting, or all of the above.",
     "email": "hello@brandfletch.dev"
   },
   "messages": [],
@@ -304,9 +249,9 @@
     },
     {
       "title": "Web Hosting",
-      "desc": "Full hosting infrastructure with cPanel access and managed WordPress options. Free SSL, daily backups, and active uptime monitoring on every plan.",
+      "desc": "Full hosting infrastructure with cPanel access and managed hosting options. Free SSL, daily backups, and active uptime monitoring on every plan.",
       "items": [
-        "WordPress hosting",
+        "Web hosting",
         "Full cPanel hosting",
         "Free SSL certificates",
         "Daily backups & monitoring"

@@ -13,7 +13,7 @@ const defaultContent = {
         headingPre: 'We build',
         headingAccent: 'custom websites',
         headingPost: 'and host them right.',
-        sub: 'From custom web apps to WordPress and cPanel hosting — we design, build, and host everything your business needs online. Billed in Malawi Kwacha.',
+        sub: 'From custom web apps to cPanel web hosting — we design, build, and host everything your business needs online. Billed in Malawi Kwacha.',
         ctaPrimaryLabel: 'See Hosting Plans',
         ctaPrimaryHref: '#hosting',
         ctaSecondaryLabel: 'Start a Project',
@@ -21,20 +21,15 @@ const defaultContent = {
     },
     services: [
         { title: 'Custom Website Development', desc: 'Custom-designed and built from scratch. No templates, no bloated plugins — just clean code tailored to your business.', model: 'Project-based' },
-        { title: 'WordPress Hosting', desc: 'Managed WordPress hosting with automatic updates, daily backups, and active security monitoring.', model: 'From MWK 30,000/mo' },
+        { title: 'Managed Web Hosting', desc: 'Managed web hosting with automatic updates, daily backups, and active security monitoring.', model: 'From MWK 18,000/mo' },
         { title: 'Full cPanel Hosting', desc: 'Complete web hosting with cPanel access. Host any platform — WordPress, Joomla, custom, or anything else.', model: 'From MWK 18,000/mo' },
         { title: 'Care & Maintenance', desc: 'Ongoing security patches, updates, and daily backups. Your site stays current and protected.', model: 'From MWK 30,000/mo' },
         { title: 'Website Migration', desc: 'Already hosted elsewhere? We move your site with zero downtime.', model: 'One-time fee' },
         { title: 'Custom Web Apps & Systems', desc: 'Outgrown your current setup? We build the custom app, API, or platform your business needs next.', model: 'Project-based' }
     ],
-    hostingWordPress: [
-        { name: 'Starter', tagline: 'Managed WordPress for a single site — great for a first business website.', priceMonthlyMWK: 30000, priceYearlyMWK: 300000, features: ['3 WordPress websites', '20GB NVMe SSD storage', 'Free SSL certificate', 'Free CDN', '2 mailboxes per website', 'Weekly automatic backups', 'Automatic WordPress updates', 'Standard support'] },
-        { name: 'Business', tagline: 'Managed WordPress for businesses running multiple sites, with daily backups and priority support.', priceMonthlyMWK: 60000, priceYearlyMWK: 600000, features: ['Unlimited WordPress websites', '50GB NVMe SSD storage', 'Free SSL certificate', 'Free CDN', 'Unlimited mailboxes', 'Daily automatic backups', 'Automatic WordPress updates', 'Free staging environment', 'Free site migration', 'Priority support'], highlighted: true },
-        { name: 'Agency', tagline: 'Dedicated resources for agencies and high-traffic client sites.', priceMonthlyMWK: 120000, priceYearlyMWK: 1200000, features: ['Unlimited WordPress websites', '100GB NVMe SSD storage', 'Free SSL certificate', 'Free CDN', 'Unlimited mailboxes', 'Daily + on-demand backups', 'Automatic WordPress updates', 'Free staging environment', 'Free malware scanning & removal', 'Dedicated support'] }
-    ],
     hostingCpanel: [
-        { name: 'Starter', tagline: 'Full cPanel hosting for a single website — host any platform.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['1 website', '20GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', '5 email accounts', 'Weekly automatic backups', 'Standard support'] },
-        { name: 'Business', tagline: 'cPanel hosting for growing businesses with multiple sites.', priceMonthlyMWK: 36000, priceYearlyMWK: 360000, features: ['Up to 10 websites', '50GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', 'Unlimited email accounts', 'Daily automatic backups', 'Free site migration', 'Priority support'], highlighted: true },
+        { name: 'Starter', tagline: 'Full cPanel hosting for a single website — host any platform.', priceMonthlyMWK: 18000, priceYearlyMWK: 180000, features: ['Unlimited websites', '20GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', '5 email accounts', 'Weekly automatic backups', 'Standard support'] },
+        { name: 'Business', tagline: 'cPanel hosting for growing businesses with multiple sites.', priceMonthlyMWK: 36000, priceYearlyMWK: 360000, features: ['Unlimited websites', '50GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', 'Unlimited email accounts', 'Daily automatic backups', 'Free site migration', 'Priority support'], highlighted: true },
         { name: 'Agency', tagline: 'Full cPanel hosting with dedicated resources and room to scale.', priceMonthlyMWK: 72000, priceYearlyMWK: 720000, features: ['Unlimited websites', '100GB NVMe SSD storage', 'Full cPanel access', 'Free SSL certificate', 'Unlimited email accounts', 'Daily backups + malware scanning', 'Dedicated IP address available', 'Dedicated support'] }
     ],
     hostingNote: 'Prices shown in Malawi Kwacha. Pay yearly and get 2 months free versus paying monthly. Every plan includes free SSL, free CDN, and active uptime monitoring.',
@@ -51,7 +46,7 @@ const defaultContent = {
         heading: 'Brandfletch Dev Studio',
         paragraphs: [
             'Brandfletch Dev Studio is a Malawian software studio that designs, builds, and hosts websites and web applications. We build custom platforms from scratch — not templates — tailored to the specific needs of each business we work with.',
-            'Beyond custom development, we offer full web hosting with cPanel access and managed WordPress hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.',
+            'Beyond custom development, we offer full web hosting with cPanel access and managed web hosting. Whether we build your site or you bring your own, we keep it fast, secure, and online. Everything is billed locally in Malawi Kwacha.',
             'We have built and maintain a portfolio of platforms serving thousands of users across e-commerce, education, accounting, advertising, and communications. Every project we take on is built to scale.'
         ],
     },
@@ -63,7 +58,7 @@ const defaultContent = {
     ],
     capabilities: [
         { title: 'Custom Web Development', desc: 'Custom websites and web applications from scratch.', items: ['React & Next.js', 'Node.js & Express', 'PostgreSQL & MongoDB', 'REST & WebSocket APIs'] },
-        { title: 'Web Hosting', desc: 'Full hosting with cPanel and managed WordPress.', items: ['WordPress hosting', 'Full cPanel hosting', 'Free SSL certificates', 'Daily backups & monitoring'] },
+        { title: 'Web Hosting', desc: 'Full hosting with cPanel access.', items: ['Web hosting', 'Full cPanel hosting', 'Free SSL certificates', 'Daily backups & monitoring'] },
         { title: 'Design & User Experience', desc: 'Fast, intuitive interfaces that work on any connection.', items: ['Responsive design', 'Mobile-first approach', 'Performance optimization', 'SEO foundations'] },
         { title: 'Ongoing Support', desc: 'Security patches, updates, backups, and maintenance.', items: ['Security patches', 'Software updates', 'Daily backups', 'Dedicated support contact'] }
     ],
@@ -71,7 +66,7 @@ const defaultContent = {
     aboutCta: { text: 'Want to see what we can build for you?', linkLabel: 'Start a Project' },
     contact: {
         heading: "Let's build your website.",
-        sub: "Tell us about your business — whether you need a custom build, WordPress hosting, cPanel hosting, or all of the above.",
+        sub: "Tell us about your business — whether you need a custom build, cPanel web hosting, or all of the above.",
         email: 'hello@brandfletch.dev',
     }
 };
@@ -146,9 +141,7 @@ function renderServices() {
 
 // --- Render Hosting Packages ---
 function renderHosting() {
-    const wpGrid = document.getElementById('wpPricingGrid');
     const cpGrid = document.getElementById('cpanelPricingGrid');
-    const wpPackages = siteContent.hostingWordPress || defaultContent.hostingWordPress;
     const cpPackages = siteContent.hostingCpanel || defaultContent.hostingCpanel;
 
     const cardHTML = (p) => `
@@ -164,11 +157,10 @@ function renderHosting() {
             <ul class="pricing-features">
                 ${(p.features || []).map(f => `<li>${f}</li>`).join('')}
             </ul>
-            <button class="btn btn-ghost pricing-cta" data-plan-key="${wpGrid ? 'wordpress' : 'cpanel'}-${p.name.toLowerCase()}" data-plan-name="${p.name}" data-category="${wpGrid ? 'wordpress' : 'cpanel'}">Order Now</button>
+            <button class="btn btn-ghost pricing-cta" data-plan-key="cpanel-${p.name.toLowerCase()}" data-plan-name="${p.name}" data-category="cpanel">Order Now</button>
         </div>
     `;
 
-    if (wpGrid) wpGrid.innerHTML = wpPackages.map(cardHTML).join('');
     if (cpGrid) cpGrid.innerHTML = cpPackages.map(cardHTML).join('');
 
     // Wire up Order Now buttons to checkout

@@ -28,9 +28,6 @@
 
     // --- Plan data (mirrors backend) ---
     const PLANS = {
-        'wordpress-starter':    { name: 'WordPress Starter',  priceMonthly: 30000,  priceYearly: 300000  },
-        'wordpress-business':   { name: 'WordPress Business', priceMonthly: 60000,  priceYearly: 600000  },
-        'wordpress-agency':     { name: 'WordPress Agency',   priceMonthly: 120000, priceYearly: 1200000 },
         'cpanel-starter':       { name: 'cPanel Starter',     priceMonthly: 18000,  priceYearly: 180000  },
         'cpanel-business':      { name: 'cPanel Business',   priceMonthly: 36000,  priceYearly: 360000  },
         'cpanel-agency':        { name: 'cPanel Agency',      priceMonthly: 72000,  priceYearly: 720000  }
